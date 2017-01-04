@@ -1,34 +1,24 @@
 classdef armGaussian<handle
 	
 	properties
-		h	 % Int : Which state is hot
-		mean % (2*N) : Expectations of each arm for each state
-		var	 % (2*N) : Variances of each arm for each state
-		p	 % Double: Probability to stay in normal state
-		ptoH % (1*N) : Probabilities that one arm became hot
-		ptoN % (1*N) : Probabilities that each hot arm go back to normal
+		s	 % Int : Current state vector
+		mean % (1*N) : Expectations of the arm for each state
+		v	 % (1*N) : Variances of the arm for each state
+		A	 % (N*N) : Transition matrix
 	end
 	
 	methods
-		function self = armGaussian(mean, var, ptoH, ptoN)
-			self.h=0; 
+		function self = armGaussian(s, mean, v, A)
+			self.s=s; 
 			self.mean = mean;
-			self.var = var;
-			self.p = 1-sum(ptoH);
-			self.ptoH = ptoH/sum(ptoH);
-			self.ptoN = ptoN;
+			self.v = v;
+			self.A = A./sum(A,2);
 		end
 		
-		function [reward] = sample(self, s)
-			reward = self.mean(1+(h==s),s) + self.var(1+(h==s),s)*randn(1);
-			if (h == 0)
-				if (rand(1) > self.p) 
-					[~,h] = max(mnrnd(1,ptoH));
-				end
-			else
-				h = h*(rand(1)>self.ptoN(1,h));
-			end
+		function [reward] = sample(self)
+			reward = self.mean(1,self.s) + self.v(1,self.s)*randn(1);
+			[~,self.s] = max(mnrnd(1,self.A(self.s,:)),[],2);
 		end
 				
-	end	   
+	end
 end

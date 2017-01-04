@@ -12,7 +12,7 @@ classdef severalArmGaussian<handle
 	methods
 		function self = severalArmGaussian(mean, v, ptoH, ptoN)
 			self.h=0; 
-			self.mean = mean
+			self.mean = mean;
 			self.v = v;
 			self.p = 1-sum(ptoH);
 			self.ptoH = ptoH/sum(ptoH);

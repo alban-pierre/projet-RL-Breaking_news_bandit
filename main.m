@@ -5,6 +5,7 @@ if (~isMatlab)
     rand('seed',1);
 end
 
+gaussian = 1;
 
 % Many arms can became hot at the same time
 MAB1 = {armGaussian(1, [2,7], [1,1], [100,1;1,20]),
@@ -13,6 +14,13 @@ MAB1 = {armGaussian(1, [2,7], [1,1], [100,1;1,20]),
 
 % One arms can became hot at the same time
 MAB2 = severalArmGaussian([2,3,1;7,5,8], ones(2,3), ones(1,3)/100, ones(1,3)/20);
+
+% Many arms can became hot at the same time
+MAB1 = severalHotArms(ones(1,3),
+                      repmat(gaussian,2,3),
+                      [2,3,1;7,5,8],
+                      ones(2,3),
+                      repmat([0.99,0.01;0.1,0.9],[1,1,3]));
 
 
 s = zeros(3,1000);

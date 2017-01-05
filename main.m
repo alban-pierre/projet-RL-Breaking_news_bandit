@@ -1,8 +1,8 @@
 
 isMatlab = exist('OCTAVE_VERSION', 'builtin') == 0;
 if (~isMatlab)
-	pkg load statistics;
-	rand('seed',1);
+    pkg load statistics;
+    rand('seed',1);
 end
 
 
@@ -17,18 +17,18 @@ MAB2 = severalArmGaussian([2,3,1;7,5,8], ones(2,3), ones(1,3)/100, ones(1,3)/20)
 
 s = zeros(3,1000);
 for i=1:1000
-	s(1,i) = MAB1{1}.sample();
-	s(2,i) = MAB1{2}.sample();
-	s(3,i) = MAB1{3}.sample();
+    s(1,i) = MAB1{1}.sample();
+    s(2,i) = MAB1{2}.sample();
+    s(3,i) = MAB1{3}.sample();
 end
 figure(1);
 plot(s');
 
 s = zeros(3,1000);
 for i=1:1000
-	s(1,i) = MAB2.sample(1);
-	s(2,i) = MAB2.sample(2);
-	s(3,i) = MAB2.sample(3);
+    s(1,i) = MAB2.sample(1);
+    s(2,i) = MAB2.sample(2);
+    s(3,i) = MAB2.sample(3);
 end
 figure(2);
 plot(s');

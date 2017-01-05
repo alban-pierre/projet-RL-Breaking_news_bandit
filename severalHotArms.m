@@ -1,4 +1,9 @@
 classdef severalHotArms<handle
+
+	% Class that gather many different arms for different states
+
+	% It allows several classes to be hot (state > 1) at the same time
+	% The status (hot or not) of all arms is updated when one arm is sampled
     
     properties
         h    % {1*N}(1*Sn) : Which state is hot
@@ -15,7 +20,7 @@ classdef severalHotArms<handle
                         case 'gaussian'
                             self.arms{s,n} = armGaussian(mean{s,n}, v{s, n});
                         otherwise
-                            self.arms{s,n}.sample = @() assert(false);
+                            self.arms{s,n}.sample = @() assert(false, 'Reached undefined state');
                     end
                 end
             end

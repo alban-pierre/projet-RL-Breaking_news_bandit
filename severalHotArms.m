@@ -1,14 +1,21 @@
 classdef severalHotArms<handle
 
-	% Class that gather many different arms for different states
+    % Class that gather many different arms for different states
 
-	% It allows several classes to be hot (state > 1) at the same time
-	% The status (hot or not) of all arms is updated when one arm is sampled
+    % It allows several classes to be hot (state > 1) at the same time
+    % The status (hot or not) of all arms is updated when one arm is sampled
+
+    % Input :
+    % istate : (1*N)        : Initial state of each arm
+    % type   : {Sn*N}       : Type of each arm ('gaussian' only for now)
+    % mean   : {Sn*N}       : Mean of each arm
+    % v      : {Sn*N}       : Variance of each arm
+    % p      : {Sn*N}(1*Sn) : Transition probabilities of each arm
     
     properties
-        h    % {1*N}(1*Sn) : Which state is hot
-        p    % {S*N}(1*Sn) : Transition probabilities
-        arms % {S*N} : Each arm
+        h    % (1*N)        : Which state is hot
+        p    % {Sn*N}(1*Sn) : Transition probabilities
+        arms % {Sn*N}       : Each arm
     end
     
     methods

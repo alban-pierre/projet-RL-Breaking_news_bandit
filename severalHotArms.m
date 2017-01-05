@@ -1,22 +1,21 @@
 classdef severalHotArms<handle
     
     properties
-        h    % (S*N) : Which state is hot
-        %mean % (S*N) : Expectations of each arm for each state
-        %v    % (2*N) : Variances of each arm for each state
-        %p    % Double: Probability to stay in normal state
-        p    % (S*N) : Transition probabilities
+        h    % {1*N}(1*Sn) : Which state is hot
+        p    % {S*N}(1*Sn) : Transition probabilities
         arms % {S*N} : Each arm
     end
     
     methods
         function self = severalHotArms(istate, type, mean, v, p)
             self.h=istate;
-            for s=1:S
-                for n=1:N
+            for n=1:size(type,1)
+                for s=1:size(type,2)
                     switch type{s,n}
                         case 'gaussian'
-                            self.arms{s,n} = armGaussian(mean(s,n), v(s, n));
+                            self.arms{s,n} = armGaussian(mean{s,n}, v{s, n});
+                        otherwise
+                            self.arms{s,n}.sample = @() assert(false);
                     end
                 end
             end
@@ -24,15 +23,11 @@ classdef severalHotArms<handle
         end
         
         function [reward] = sample(self, s)
-            reward = self.mean(1+(self.h==s),s) + self.v(1+(self.h==s),s)*randn(1);
-            if (self.h == 0)
-                if (rand(1) > self.p) 
-                    [~,self.h] = max(mnrnd(1,self.ptoH));
-                end
-            else
-                self.h = self.h*(rand(1)>self.ptoN(1,self.h));
+            reward = self.arms{self.h(1,s), s}.sample();
+            for n=1:size(self.h,2)
+                self.h(1,n) = mnrnd(1,self.p{self.h(1,n),n}) * (1:size(self.h{1,n}))');
             end
         end
-                
+               
     end
 end

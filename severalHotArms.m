@@ -1,22 +1,26 @@
 classdef severalHotArms<handle
     
     properties
-        h    % Int : Which state is hot
-        mean % (2*N) : Expectations of each arm for each state
-        v    % (2*N) : Variances of each arm for each state
-        p    % Double: Probability to stay in normal state
-        ptoH % (1*N) : Probabilities that one arm became hot
-        ptoN % (1*N) : Probabilities that each hot arm go back to normal
+        h    % (S*N) : Which state is hot
+        %mean % (S*N) : Expectations of each arm for each state
+        %v    % (2*N) : Variances of each arm for each state
+        %p    % Double: Probability to stay in normal state
+        p    % (S*N) : Transition probabilities
+        arms % {S*N} : Each arm
     end
     
     methods
-        function self = severalArmGaussian(mean, v, ptoH, ptoN)
-            self.h=0; 
-            self.mean = mean;
-            self.v = v;
-            self.p = 1-sum(ptoH);
-            self.ptoH = ptoH/sum(ptoH);
-            self.ptoN = ptoN;
+        function self = severalHotArms(istate, type, mean, v, p)
+            self.h=istate;
+            for s=1:S
+                for n=1:N
+                    switch type{s,n}
+                        case 'gaussian'
+                            self.arms{s,n} = armGaussian(mean(s,n), v(s, n));
+                    end
+                end
+            end
+            self.p = p;
         end
         
         function [reward] = sample(self, s)

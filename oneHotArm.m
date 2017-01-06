@@ -1,34 +1,56 @@
 classdef oneHotArm<handle
-    
+
+    % Class that gather many different arms for different states
+
+    % It allows only one class to be hot (state > 1) at the same time
+    % The status (hot or not) of all arms is updated when one arm is sampled
+
+    % Input :
+    % type   : (S*N)     : Type of each arm (gaussian only for now)
+    % mean   : (S*N)     : Mean of each arm
+    % v      : (S*N)     : Variance of each arm
+    % p_to_H : ((S-1)*N) : Probabilities to become hot
+    % p_to_N : ((S-1)*N) : Probabilities to come back to normal
+        
     properties
-        h    % Int : Which state is hot
-        mean % (2*N) : Expectations of each arm for each state
-        v    % (2*N) : Variances of each arm for each state
-        p    % Double: Probability to stay in normal state
-        ptoH % (1*N) : Probabilities that one arm became hot
-        ptoN % (1*N) : Probabilities that each hot arm go back to normal
+        h      % (1*N)     : Which state is hot
+        p_to_H % ((S-1)*N) : Probabilities to become hot
+        p_to_N % ((S-1)*N) : Probabilities to come back to normal
+        arms   % (S*N)     : Each arm
     end
     
     methods
-        function self = severalArmGaussian(mean, v, ptoH, ptoN)
-            self.h=0; 
-            self.mean = mean;
-            self.v = v;
-            self.p = 1-sum(ptoH);
-            self.ptoH = ptoH/sum(ptoH);
-            self.ptoN = ptoN;
+        function self = oneHotArm(type, mean, v, p_to_H, p_to_N)
+            self.h=ones(1,size(type,2));
+            for n=1:size(type,2)
+                for s=1:size(type,1)
+                    switch type(s,n)
+                        case 1 % gaussian
+                            self.arms{s,n} = armGaussian(mean(s,n), v(s, n));
+                        otherwise
+                            self.arms{s,n}.sample = @() assert(false, 'Reached undefined state');
+                    end
+                end
+            end
+            self.p_to_H = p_to_H;
+            assert(sum(p_to_H(:)) <= 1, 'Wrong transition probabilities');
+            self.p_to_N = p_to_N;
         end
         
         function [reward] = sample(self, s)
-            reward = self.mean(1+(self.h==s),s) + self.v(1+(self.h==s),s)*randn(1);
-            if (self.h == 0)
-                if (rand(1) > self.p) 
-                    [~,self.h] = max(mnrnd(1,self.ptoH));
+            reward = self.arms{self.h(1,s), s}.sample();
+            if (sum(self.h,2) == size(self.h,2))
+                if (rand(1) < sum(self.p_to_H(:)))
+                    p = reshape(mnrnd(1,reshape(self.p_to_H,1,prod(size(self.p_to_H)))./sum(self.p_to_H(:))),size(self.p_to_H));
+                    self.h(1,sum(p,1)*(1:size(p,2))') = 1+(1:size(p,1))*sum(p,2);
                 end
             else
-                self.h = self.h*(rand(1)>self.ptoN(1,self.h));
+                [~,n] = max(self.h,[],2);
+                if (rand(1) < self.p_to_N(self.h(1,n)-1,n))
+                    self.h(1,n) = 1;
+                end
             end
         end
-                
+               
     end
 end

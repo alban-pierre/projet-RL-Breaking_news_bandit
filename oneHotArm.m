@@ -51,6 +51,10 @@ classdef oneHotArm<handle
                 end
             end
         end
-               
+        
+        function NbArms = nbArms(self)
+            NbArms = size(self.h,2);
+        end
+                       
     end
 end

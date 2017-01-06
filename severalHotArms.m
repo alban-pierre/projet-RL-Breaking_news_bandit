@@ -40,6 +40,10 @@ classdef severalHotArms<handle
                 self.h(1,n) = mnrnd(1,self.p(self.h(1,n),:,n)) * (1:size(self.p,1))';
             end
         end
-               
+
+        function NbArms = nbArms(self)
+            NbArms = size(self.h,2);
+        end
+        
     end
 end

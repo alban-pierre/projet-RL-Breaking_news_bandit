@@ -9,6 +9,7 @@ function [rew, draws] = GM(tmax, MAB)
     tmax = max(tmax, NbArms*K*(nmin+1));
     rew = zeros(1,tmax);
     draws = zeros(1,tmax);
+    em_recomputation_step = 50;
 
 
     clear t;
@@ -36,15 +37,28 @@ function [rew, draws] = GM(tmax, MAB)
         end
     end
 
+    clear means;
+    clear sigmas;
+    clear p;
+    for j=1:NbArms
+        [means{j}, sigmas{j}, p{j}] = em_approx(rw{j}, K, nmin);
+        ps{j} = hot_transitions(p{j}, t{j}, ps{j});
+    end
+    
     while (tt < tmax)
+        fprintf(2, '.');
         
-        clear means;
-        clear sigmas;
-        clear p;
         best = zeros(1,NbArms);
+        if (mod(tt,em_recomputation_step) == 0)
+            clear means;
+            clear sigmas;
+            clear p;
+            for j=1:NbArms
+                [means{j}, sigmas{j}, p{j}] = em_approx(rw{j}, K, nmin);
+                ps{j} = hot_transitions(p{j}, t{j}, ps{j});
+            end
+        end
         for j=1:NbArms
-            [means{j}, sigmas{j}, p{j}] = em_approx(rw{j}, K, nmin);
-            ps{j} = hot_transitions(p{j}, t{j}, ps{j});
             p_hot = p{j}(:,end);
             for i=1:ta(1,j);
                 p_hot = ps{j}*p_hot;

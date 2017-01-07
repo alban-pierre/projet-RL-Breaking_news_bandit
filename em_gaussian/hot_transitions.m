@@ -13,9 +13,10 @@ function ps = hot_transitions(p, t, ps_init)
     end
     
     ps = ps_init;
-    assert(all(sum(ps,1) == ones(1,K)), 'Wrong ps_init');
+    assert(all(abs(sum(ps,1) - ones(1,K)) < 0.000001), 'Wrong ps_init');
     
-    eps = 0.000001;
+    clear dif;
+    eps = 0.00001;
     i = 1;
     for k = 1:K
         for k1 = 1:K
@@ -25,6 +26,9 @@ function ps = hot_transitions(p, t, ps_init)
                 dif{i}(k2,k) = -eps;
                 i = i+1;
             end
+            %dif{i} = zeros(K);
+            %dif{i}(k1,k) = eps;
+            %i = i+1;
         end
     end
 
@@ -36,14 +40,18 @@ function ps = hot_transitions(p, t, ps_init)
             p_dif(1,i) = proba_hot_transition(ps+dif{i}, p, t);
         end
         p_dif = p_hot - p_dif;
+        %p_dif = reshape(p_dif, K, K);
+        %p_dif = p_dif - repmat(mean(p_dif,1),K,1);
+        %p_dif = reshape(p_dif, 1, K*K);
         p_dif = p_dif ./ norm(p_dif);
         for i=1:size(dif,2)
-            ps = ps + 1000*p_dif(1,i)*dif{i};
+            ps = ps + 100*p_dif(1,i)*dif{i};
         end
         % Verification that we are still between 0 and 1
         ps = max(ps, eps);
         ps = min(ps, 1-eps);
-        ps(1,:) = 1-sum(ps(2:end,:), 1);
+        %ps(1,:) = 1-sum(ps(2:end,:), 1);
+        ps = ps ./ sum(ps,1);
     end
 
 end

@@ -10,7 +10,7 @@ gaussian = 1;
 
 % One arms can became hot at the same time
 MAB1 = oneHotArm(repmat(gaussian,2,3),
-                 [0.2,0.3,0.1;0.7,0.5,0.8],
+                 [2,3,1;70,50,80],
                  ones(2,3),
                  ones(1,3)/100,
                  ones(1,3)/10);

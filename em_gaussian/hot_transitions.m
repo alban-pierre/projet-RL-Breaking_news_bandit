@@ -38,11 +38,12 @@ function ps = hot_transitions(p, t, ps_init)
         p_dif = p_hot - p_dif;
         p_dif = p_dif ./ norm(p_dif);
         for i=1:size(dif,2)
-            p_hot = p_hot + 1000*p_dif(1,i)*dif{i};
+            ps = ps + 1000*p_dif(1,i)*dif{i};
         end
         % Verification that we are still between 0 and 1
-        p_hot = max(p_hot, eps);
-        p_hot(1,:) = 1-sum(p_hot(2:end,:), 1);
-    end    
+        ps = max(ps, eps);
+        ps = min(ps, 1-eps);
+        ps(1,:) = 1-sum(ps(2:end,:), 1);
+    end
 
 end

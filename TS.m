@@ -15,8 +15,8 @@ function [rew, draws] = TS(tmax, MAB)
         beta = betarnd(sa+1, na-sa+1);
         [ma, ima] = max(beta);
         rew(1,t) = MAB.sample(ima);
-        na(1,ima)++;
-        sa(1,ima)+=rew(1,t);
+        na(1,ima) = na(1,ima) + 1;
+        sa(1,ima) = sa(1,ima) + rew(1,t);
     end
     draws = na;
 end

@@ -20,9 +20,9 @@ function [rew, draws] = TSvar(tmax, MAB)
         beta = betarnd(sa+1, na-sa+1);
         [ma, ima] = max(beta);
         rew(1,t) = MAB.sample(ima);
-        smu(1,ima)+=rew(1,t);
-        na(1,ima)++;
-        sa(1,ima)+=rew(1,t);
+        smu(1,ima) = smu(1,ima) + rew(1,t);
+        na(1,ima) = na(1,ima) + 1;
+        sa(1,ima) = sa(1,ima) + rew(1,t);
         mu(1,ima) = smu(1,ima)/na(1,ima);
         var(1,ima) = ((na(1,ima)-1).*var(1,ima) + (rew(1,t)-mu(1,ima)).^2)./na(1,ima);
     end

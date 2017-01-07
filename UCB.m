@@ -20,8 +20,8 @@ function [rew, draws] = UCB(tmax, MAB)
     for t=NbArms+1:tmax
         [ma, ima] = max(mu+sqrt(log(t)./(2*na)), [], 2);
         rew(1,t) = MAB.sample(ima);
-        smu(1,ima)+=rew(1,t);
-        na(1,ima)++;
+        smu(1,ima) = smu(1,ima) + rew(1,t);
+        na(1,ima) = na(1,ima) + 1;
         mu(1,ima) = smu(1,ima)/na(1,ima);
     end
     draws = na;

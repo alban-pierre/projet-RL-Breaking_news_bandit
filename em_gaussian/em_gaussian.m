@@ -37,7 +37,8 @@ function [mu, Pi, sigma, p_of_k_knowing_X] = em_gaussian(X, mu, Pi, sigma, maxIt
     
     % Construct a reasonable condition stop if there is none yet
     if (nargin < 6)
-        x = X(:,randperm(N)(1:min(N,5)));
+        r = randperm(N);
+        x = X(:,r(1:min(N,5)));
         avg_dist = sqrt(mean(mean(sqdist(x,x))));
         condition_of_stop = @(x2,x3,x4,x5,x6,x7) (norm([x2(:); x3(:); x4(:)] - ...
                                                        [x5(:); x6(:); x7(:)]) > avg_dist/1000);
@@ -71,7 +72,7 @@ function [mu, Pi, sigma, p_of_k_knowing_X] = em_gaussian(X, mu, Pi, sigma, maxIt
         for k=1:K
             s = 0;
             for n=1:N
-                s += (X(:,n)-mu(:,k)) * (X(:,n)-mu(:,k))' * q(k,n);
+                s = s + (X(:,n)-mu(:,k)) * (X(:,n)-mu(:,k))' * q(k,n);
             end
             sigma(:,:,k) = s/sum(q(k,:),2);
             sigma(:,:,k) = (sigma(:,:,k)+sigma(:,:,k)')/2; % Make sure sigma is symmetric
@@ -81,7 +82,7 @@ function [mu, Pi, sigma, p_of_k_knowing_X] = em_gaussian(X, mu, Pi, sigma, maxIt
         if (stooop > 1)
             is_not_converged = condition_of_stop(mu, Pi, sigma, oldmu, oldPi, oldsigma);
         end
-        stooop++;
+        stooop = stooop + 1;
     end
 
     

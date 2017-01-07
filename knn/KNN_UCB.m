@@ -1,6 +1,6 @@
 function [rew, draws] = KNN_UCB(tmax, MAB)
 
-    % Does not work yet since rewards are not bounded by [0,1]
+    % Decides which arm to draw based on a k-nearest neightbors of the space (x = last reward of the arm, y = time between now and the last time this arm drawn)
 
     NbArms=MAB.nbArms();
 

@@ -21,6 +21,10 @@ function img = plot_knn_points(rw, tl)
         na(indice2(X(2,i)), indice(X(1,i))) = na(indice2(X(2,i)), indice(X(1,i))) + 1;
     end
 
+    nanonzero = sum(na,2) > 0.5;
+    na = na(nanonzero, :);
+    img = img(nanonzero, :);
+    
     na = max(na,1);
 
     img = img ./ na;

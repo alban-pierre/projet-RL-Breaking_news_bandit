@@ -32,9 +32,9 @@ function [rew, draws] = KNN_UCB(tmax, MAB)
     
     for t=2*NbArms+1:tmax
         for i=1:NbArms
-            mu(1,i) = knn(rw{i}, tl{i}, ta(1,i), ceil(sqrt(t/NbArms)));
+            mu(1,i) = knn(rw{i}, 2*exp(-tl{i}+1), 2*exp(-ta(1,i)+1), ceil(sqrt(t/NbArms)));
         end
-        if (rand(1) < 0.01)
+        if (rand(1) < 0.1)
             ima = randi(NbArms);
         else
             [ma, ima] = max(mu+sqrt(log(t)./(2*na)), [], 2);

@@ -9,7 +9,7 @@ function [rew, draws] = GM(tmax, MAB)
     tmax = max(tmax, NbArms*K*(nmin+1));
     rew = zeros(1,tmax);
     draws = zeros(1,tmax);
-    em_recomputation_step = 50;
+    em_recomputation_step = tmax/20;
 
 
     clear t;

@@ -4,29 +4,41 @@ function [rew, draws] = KNN_UCB(tmax, MAB)
 
     NbArms=MAB.nbArms();
 
-    tmax = max(tmax, NbArms);
+    tmax = max(tmax, 2*NbArms);
 
     %mu = zeros(1,NbArms);
     %smu = zeros(1,NbArms);
-    na = ones(1,NbArms);
+    na = 2*ones(1,NbArms);
     rew = zeros(1,tmax);
     ta = ones(1,NbArms);
-    
+    mu = ones(1,NbArms);
+
+    clear rw;
+    clear tl;
     for i=1:NbArms
-        mu(1,i) = MAB.sample(i);
-        rw{i} = mu(1,i);
-        tl{i} = ta(1,i);
-        ta(1,i) = 0;
-        ta = ta+1;
+        rw{i} = [];
+        tl{i} = [];
     end
-    rew(1,1:NbArms) = mu;
-    smu = mu;
-    
-    for t=NbArms+1:tmax
+
+    for j=0:1
         for i=1:NbArms
-            mu(1,i) = knn(rw{i}, tl{i}, ta, ceil(sqrt(t)/NbArms));
+            rew(1,j*NbArms+i) = MAB.sample(i);
+            rw{i} = [rw{i}, rew(1,j*NbArms+i)];
+            tl{i} = [tl{i}, ta(1,i)];
+            ta(1,i) = 0;
+            ta = ta+1;
         end
-        [ma, ima] = max(mu+sqrt(log(t)./(2*na)), [], 2);
+    end
+    
+    for t=2*NbArms+1:tmax
+        for i=1:NbArms
+            mu(1,i) = knn(rw{i}, tl{i}, ta(1,i), ceil(sqrt(t/NbArms)));
+        end
+        if (rand(1) < 0.01)
+            ima = randi(NbArms);
+        else
+            [ma, ima] = max(mu+sqrt(log(t)./(2*na)), [], 2);
+        end
         rew(1,t) = MAB.sample(ima);
         rw{ima} = [rw{ima}, rew(1,t)];
         tl{ima} = [tl{ima}, ta(1,ima)];

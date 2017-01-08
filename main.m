@@ -48,24 +48,25 @@ if (false)
     plot(s');
 end
 
-allrew = zeros(3,1000);
-
+tmax = 1000; % KNN_UCB works efficiently for t > 2000
 ntests = 10;
 
+allrew = zeros(3,tmax);
+
 for i=1:ntests
-    [rew, draws] = TS(1000, MAB1);
+    [rew, draws] = TS(tmax, MAB1);
     allrew(1,:) = allrew(1,:) + rew;
     %[rew, draws] = TSvar(1000, MAB1);
     %allrew(2,:) = allrew(2,:) + rew;
-    [rew, draws] = KNN_UCB(1000, MAB1);
+    [rew, draws] = KNN_UCB(tmax, MAB1);
     allrew(2,:) = allrew(2,:) + rew;
-    [rew, draws] = UCB(1000, MAB1);
+    [rew, draws] = UCB(tmax, MAB1);
     allrew(3,:) = allrew(3,:) + rew;
 end
 allrew = allrew./ntests;
 
 figure;
-plot(1:1000, cumsum(allrew(1,:)), 'b');
+plot(1:tmax, cumsum(allrew(1,:)), 'b');
 hold on;
-plot(1:1000, cumsum(allrew(2,:)),'r');
-plot(1:1000, cumsum(allrew(3,:)),'k');
+plot(1:tmax, cumsum(allrew(2,:)),'r');
+plot(1:tmax, cumsum(allrew(3,:)),'k');

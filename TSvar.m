@@ -14,7 +14,7 @@ function [rew, draws] = TSvar(tmax, MAB)
     sa = zeros(1, NbArms);
     var = zeros(1, NbArms);
     
-    for 2=1:tmax
+    for t=1:tmax
         navar = (mu.*(1-mu))./max(10^-10, var);
         navar = max(na, ceil(na.*navar));
         navar = min(navar, na.^2);

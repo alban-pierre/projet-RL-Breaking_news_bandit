@@ -48,7 +48,7 @@ end
 
 allrew = zeros(3,1000);
 
-ntests = 10;
+ntests = 100;
 
 for i=1:ntests
     [rew, draws] = TS(1000, MAB1);

@@ -29,11 +29,11 @@ function [rew, draws] = TS(tmax, MAB)
         rew(1,t) = MAB.sample(ima);
         na(1,ima) = na(1,ima) + 1;
         if (rew(1,t) > rmax)
-            sa = sa/((rew(1,t)-rmin)/(rmax-rmin));
+            sa = sa./((rew(1,t)-rmin)./(rmax-rmin));
             rmax = rew(1,t);
         end
         if (rew(1,t) < rmin)
-            sa = 1-(1-sa)/((rmax-rew(1,t))/(rmax-rmin));
+            sa = 1-(1-sa)./((rmax-rew(1,t))./(rmax-rmin));
             rmin = rew(1,t);
         end
         sa(1,ima) = sa(1,ima) + (rew(1,t)-rmin)/(rmax-rmin);

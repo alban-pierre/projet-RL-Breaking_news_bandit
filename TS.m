@@ -7,7 +7,6 @@ function [rew, draws] = TS(tmax, MAB)
 
     tmax = max(tmax, NbArms);
 
-    mu = zeros(1,NbArms);
     na = ones(1,NbArms);
     rew = zeros(1,tmax);
     sa = zeros(1, NbArms);

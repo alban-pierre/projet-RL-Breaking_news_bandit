@@ -48,7 +48,7 @@ end
 
 allrew = zeros(3,1000);
 
-ntests = 100;
+ntests = 10;
 
 for i=1:ntests
     [rew, draws] = TS(1000, MAB1);
@@ -62,8 +62,8 @@ allrew = allrew./ntests;
 
 
 figure;
-plot(1:1000, (1:1000)*0.35 - cumsum(allrew(1,:)), 'b');
+plot(1:1000, cumsum(allrew(1,:)), 'b');
 hold on;
-plot(1:1000, (1:1000)*0.35 - cumsum(allrew(2,:)),'r');
-plot(1:1000, (1:1000)*0.35 - cumsum(allrew(3,:)),'k');
+plot(1:1000, cumsum(allrew(2,:)),'r');
+plot(1:1000, cumsum(allrew(3,:)),'k');
 

@@ -69,4 +69,3 @@ plot(1:1000, cumsum(allrew(1,:)), 'b');
 hold on;
 plot(1:1000, cumsum(allrew(2,:)),'r');
 plot(1:1000, cumsum(allrew(3,:)),'k');
-

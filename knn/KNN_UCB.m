@@ -29,17 +29,23 @@ function [rew, draws] = KNN_UCB(tmax, MAB)
             ta = ta+1;
         end
     end
+
+    rmin = min(rew,[],2);
+    rmax = max(rew,[],2);
     
     for t=2*NbArms+1:tmax
-        for i=1:NbArms
-            mu(1,i) = knn(rw{i}, 2*exp(-tl{i}+1), 2*exp(-ta(1,i)+1), ceil(sqrt(t/NbArms)));
-        end
-        if (rand(1) < 0.1)
-            ima = randi(NbArms);
-        else
+%        if (rand(1) < 0.1) % To force exploration
+%            ima = randi(NbArms);
+%        else
+            for i=1:NbArms
+                mu(1,i) = knn(rw{i}, 2*exp(-tl{i}+1), 2*exp(-ta(1,i)+1), ceil(sqrt(t/NbArms)));
+            end
+            mu = (mu - rmin)./(rmax - rmin);
             [ma, ima] = max(mu+sqrt(log(t)./(2*na)), [], 2);
-        end
+%        end
         rew(1,t) = MAB.sample(ima);
+        rmax = max(rmax, rew(1,t));
+        rmin = min(rmin, rew(1,t));
         rw{ima} = [rw{ima}, rew(1,t)];
         tl{ima} = [tl{ima}, ta(1,ima)];
         ta(1,ima) = 0;

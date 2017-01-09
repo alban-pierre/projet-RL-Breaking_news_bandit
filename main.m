@@ -45,7 +45,7 @@ end
 
 
 
-tmax = 1000; % KNN_UCB works efficiently for t > 2000
+tmax = 10000; % KNN_UCB works efficiently for t > 2000
 ntests = 10;
 
 allrew = zeros(3,tmax);
@@ -58,14 +58,14 @@ for i=1:ntests
     %[rew, draws] = TSvar(1000, MAB1);
     %allrew(1,:) = allrew(1,:) + rew;
     [rew, draws] = KNN_UCB_NEW(tmax, MAB1);
-    allrew(3,:) = allrew(1,:) + rew;
+    allrew(3,:) = allrew(3,:) + rew;
     %[rew, draws] = KNN_UCB_OLD(tmax, MAB1);
     %allrew(1,:) = allrew(1,:) + rew;
     %[rew, draws] = UCB(tmax, MAB1);
     %allrew(1,:) = allrew(1,:) + rew;
     [rew, draws, hot_expected, hot_real] = UCB_BN(tmax, MAB1);
     allrew(2,:) = allrew(2,:) + rew;
-    if(i==1)
+    if(i==ntests)
         figure;
         subplot(3,1,1);
         stairs(hot_real');

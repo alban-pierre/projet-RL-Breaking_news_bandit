@@ -67,7 +67,7 @@ function [rew, draws, hot_expected, hot_real] = UCB_BN(tmax, MAB)
                 %Enter hot state with new values
                 smu(1,ima) = rew(1,t);
                 na(1,ima) = 1;
-                max_rew(1,ima) = rew(1,t);
+                max_rew(1,ima) = rew(1,t)+(rmin+(rmax-rmin)*sqrt(log(t)./(2*na(1,ima))));
                 %Normalize as usual if needed
                 if (rew(1,t) > rmax)
                     rmax = rew(1,t);

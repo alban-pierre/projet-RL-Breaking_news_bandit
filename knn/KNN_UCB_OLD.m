@@ -1,4 +1,4 @@
-function [rew, draws] = KNN_UCB(tmax, MAB)
+function [rew, draws] = KNN_UCB_OLD(tmax, MAB)
 
     % Decides which arm to draw based on a k-nearest neightbors of the space (x = last reward of the arm, y = time between now and the last time this arm drawn)
 

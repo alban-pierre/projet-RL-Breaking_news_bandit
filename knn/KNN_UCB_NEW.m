@@ -1,7 +1,11 @@
-function [rew, draws] = KNN_UCB_NEW(tmax, MAB)
+function [rew, draws] = KNN_UCB_NEW(tmax, MAB, squeezed)
 
     % Decides which arm to draw based on a k-nearest neightbors of the space (x = last reward of the arm, y = time between now and the last time this arm drawn)
 
+    if (nargin < 3)
+        squeezed = 1;
+    end
+    
     NbArms=MAB.nbArms();
 
     tmax = max(tmax, 2*NbArms);
@@ -30,8 +34,11 @@ function [rew, draws] = KNN_UCB_NEW(tmax, MAB)
         end
     end
 
-    rmin = min(rew,[],2);
-    rmax = max(rew,[],2);
+    rmin = min(rew(1,1:NbArms*2),[],2);
+    rmax = max(rew(1,1:NbArms*2),[],2);
+    for i=1:NbArms
+        rw{i} = squeezed*(rw{i} - rmin)./(rmax - rmin);
+    end
     
     for t=2*NbArms+1:tmax
 %        if (rand(1) < 0.1) % To force exploration
@@ -40,13 +47,22 @@ function [rew, draws] = KNN_UCB_NEW(tmax, MAB)
             for i=1:NbArms
                 mu(1,i) = knn(rw{i}, 2*exp(-tl{i}+1), 2*exp(-ta(1,i)+1), ceil(sqrt(t/NbArms)));
             end
-            mu = (mu - rmin)./(rmax - rmin);
+            %mu = (mu - rmin)./(rmax - rmin);
             [ma, ima] = max(mu+sqrt(log(t)./(2*na)), [], 2);
 %        end
         rew(1,t) = MAB.sample(ima);
-        rmax = max(rmax, rew(1,t));
-        rmin = min(rmin, rew(1,t));
-        rw{ima} = [rw{ima}, rew(1,t)];
+        if (rew(1,t) > rmax)
+            for i=1:NbArms
+                rw{i} = rw{i}./((rew(1,t)-rmin)./(rmax-rmin));
+            end
+            rmax = rew(1,t);
+        elseif (rew(1,t) < rmin)
+            for i=1:NbArms
+                rw{i} = squeezed - (squeezed - rw{i})./((rmax-rew(1,t))./(rmax-rmin));
+            end
+            rmin = rew(1,t);
+        end
+        rw{ima} = [rw{ima}, squeezed*(rew(1,t) - rmin)/(rmax - rmin)];
         tl{ima} = [tl{ima}, ta(1,ima)];
         ta(1,ima) = 0;
         ta = ta+1;

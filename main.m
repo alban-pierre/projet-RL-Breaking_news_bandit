@@ -48,7 +48,7 @@ if (false)
     plot(s');
 end
 
-tmax = 1000; % KNN_UCB works efficiently for t > 2000
+tmax = 10000; % KNN_UCB works efficiently for t > 2000
 ntests = 10;
 
 allrew = zeros(1,tmax);
@@ -57,18 +57,20 @@ for i=1:ntests
     %[rew, draws] = TS(tmax, MAB1);
     %allrew(1,:) = allrew(1,:) + rew;
     %[rew, draws] = TSvar(1000, MAB1);
-    %allrew(2,:) = allrew(2,:) + rew;
-    [rew, draws] = KNN_UCB_OLD(tmax, MAB1);
+    %allrew(1,:) = allrew(1,:) + rew;
+    [rew, draws] = KNN_UCB_NEW(tmax, MAB1);
     allrew(1,:) = allrew(1,:) + rew;
+    %[rew, draws] = KNN_UCB_OLD(tmax, MAB1);
+    %allrew(1,:) = allrew(1,:) + rew;
     %[rew, draws] = UCB(tmax, MAB1);
-    %allrew(3,:) = allrew(3,:) + rew;
+    %allrew(1,:) = allrew(1,:) + rew;
     fprintf(2,'.');
 end
 time() - tt
 allrew = allrew./ntests;
 
 
-%save('results/knn_ucb_old_10000_10.mat', 'allrew');
+save('results/knn_ucb_new_10000_10.mat', 'allrew');
 
 figure;
 plot(1:tmax, cumsum(allrew(1,:)), 'b');
@@ -81,16 +83,19 @@ if (false)
     ts = load('results/ts_10000_100.mat');
     ucb = load('results/ucb_10000_100.mat');
     knn_ucb_old = load('results/knn_ucb_old_10000_10.mat');
+    knn_ucb_new = load('results/knn_ucb_new_10000_10.mat');
     figure;
     plot(1:10000, cumsum(ts.allrew), '.b');
     hold on;
     plot(1:10000, cumsum(ucb.allrew), '.k');
     plot(1:10000, cumsum(knn_ucb_old.allrew), '.r');
+    plot(1:10000, cumsum(knn_ucb_new.allrew), '.g');
     figure;
     plot(1:1000, cumsum(ts.allrew(1,1:1000)), '.b');
     hold on;
     plot(1:1000, cumsum(ucb.allrew(1,1:1000)), '.k');
     plot(1:1000, cumsum(knn_ucb_old.allrew(1,1:1000)), '.r');
+    plot(1:1000, cumsum(knn_ucb_new.allrew(1,1:1000)), '.g');
 end
 
 

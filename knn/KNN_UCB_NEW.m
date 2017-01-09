@@ -50,7 +50,7 @@ function [rew, draws] = KNN_UCB_NEW(tmax, MAB, squeezed)
             for i=1:NbArms
                 % k nearest neightbors algo
                 % Here the rewards are bounded by 0 and (squeezed), which was is not the case of UCB_KNN_OLD where the resize is made just after the knn computation
-                mu(1,i) = knn(rw{i}, 2*exp(-tl{i}+1), 2*exp(-ta(1,i)+1), ceil(sqrt(t/NbArms)));
+                mu(1,i) = knn(rw{i}, 2*exp(-tl{i}+1), 2*exp(-ta(1,i)+1), ceil(na(1,i)/700)*ceil(sqrt(na(1,i))));%ceil(sqrt(t/NbArms)));
             end
             %mu = (mu - rmin)./(rmax - rmin);
             [~, ima] = max(mu./squeezed + sqrt(log(t)./(2*na)), [], 2); % arm chosen given the expectation and the variance

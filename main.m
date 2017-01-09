@@ -104,13 +104,14 @@ end
 allrew = allrew./ntests;
 
 
-%save('results/knn_ucb_new_m_10000_10.mat', 'allrew');
+
+%save('results/ucb_bn_10000_100.mat', 'allrew');
 
 figure;
-plot(1:tmax, cumsum(allrew(1,:)), 'b');
+plot(1:tmax, cumsum(allrew(1,:)), '.k');
 hold on;
-plot(1:tmax, cumsum(allrew(2,:)),'r');
-plot(1:tmax, cumsum(allrew(3,:)),'k');
+plot(1:tmax, cumsum(allrew(2,:)),'.m');
+plot(1:tmax, cumsum(allrew(3,:)),'.g');
 
 
 
@@ -121,6 +122,7 @@ if (false) % Plots stored results for each algorithm
     knn_ucb_old = load('results/knn_ucb_old_10000_10.mat');
     knn_ucb_new = load('results/knn_ucb_new_10000_10.mat');
     gm = load('results/gm_10000_1.mat');
+    ucb_bn = load('results/ucb_bn_10000_100.mat');
     figure;
     plot(1:10000, cumsum(ts.allrew), '.b');
     hold on;
@@ -128,10 +130,11 @@ if (false) % Plots stored results for each algorithm
     plot(1:10000, cumsum(knn_ucb_old.allrew), '.r');
     plot(1:10000, cumsum(knn_ucb_new.allrew), '.g');
     plot(1:10000, cumsum(gm.allrew), '.c');
+    plot(1:10000, cumsum(ucb_bn.allrew), '.m');
     title('One hot arm model');
     xlabel('Iterations');
     ylabel('Cumulative rewards');
-    legend('TS', 'UCB', 'KNN-0', 'KNN-1', 'GM', 'location', 'southeast');
+    legend('TS', 'UCB', 'KNN-0', 'KNN-1', 'GM', 'BN', 'location', 'southeast');
     figure;
     plot(1:1000, cumsum(ts.allrew(1,1:1000)), '.b');
     hold on;
@@ -139,10 +142,11 @@ if (false) % Plots stored results for each algorithm
     plot(1:1000, cumsum(knn_ucb_old.allrew(1,1:1000)), '.r');
     plot(1:1000, cumsum(knn_ucb_new.allrew(1,1:1000)), '.g');
     plot(1:1000, cumsum(gm.allrew(1,1:1000)), '.c');
+    plot(1:1000, cumsum(ucb_bn.allrew(1,1:1000)), '.m');
     title('One hot arm model');
     xlabel('Iterations');
     ylabel('Cumulative rewards');
-    legend('TS', 'UCB', 'KNN-0', 'KNN-1', 'GM', 'location', 'southeast');
+    legend('TS', 'UCB', 'KNN-0', 'KNN-1', 'GM', 'BN', 'location', 'southeast');
     
     % Multiple hot arms
     ts = load('results/ts_m_10000_100.mat');
@@ -185,6 +189,7 @@ end
     % KNN_UCB_OLD :   29.452s  pour tmax = 10000    % By old I mean the resize in [0-1] is made after knn
     % KNN_UCB_NEW :   25.389s  pour tmax = 10000    % By new I mean the resize in [0-1] is made before knn
     % GM -------- : 1000.5s    pour tmax = 10000
+    % BN -------- :    3.0577s pour tmax = 10000
 
 
     % Computation time : (Several hot arm)

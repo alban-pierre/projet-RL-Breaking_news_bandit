@@ -48,25 +48,58 @@ if (false)
     plot(s');
 end
 
-tmax = 1000; % KNN_UCB works efficiently for t > 2000
+tmax = 10000; % KNN_UCB works efficiently for t > 2000
 ntests = 10;
 
-allrew = zeros(3,tmax);
-
+allrew = zeros(1,tmax);
+tt = time();
 for i=1:ntests
-    [rew, draws] = TS(tmax, MAB1);
-    allrew(1,:) = allrew(1,:) + rew;
+    %[rew, draws] = TS(tmax, MAB1);
+    %allrew(1,:) = allrew(1,:) + rew;
     %[rew, draws] = TSvar(1000, MAB1);
     %allrew(2,:) = allrew(2,:) + rew;
     [rew, draws] = KNN_UCB(tmax, MAB1);
-    allrew(2,:) = allrew(2,:) + rew;
-    [rew, draws] = UCB(tmax, MAB1);
-    allrew(3,:) = allrew(3,:) + rew;
+    allrew(1,:) = allrew(1,:) + rew;
+    %[rew, draws] = UCB(tmax, MAB1);
+    %allrew(3,:) = allrew(3,:) + rew;
+    fprintf(2,'.');
 end
+time() - tt
 allrew = allrew./ntests;
+
+
+save('results/knn_ucb_old_10000_10.mat', 'allrew');
 
 figure;
 plot(1:tmax, cumsum(allrew(1,:)), 'b');
-hold on;
-plot(1:tmax, cumsum(allrew(2,:)),'r');
-plot(1:tmax, cumsum(allrew(3,:)),'k');
+%hold on;
+%plot(1:tmax, cumsum(allrew(2,:)),'r');
+%plot(1:tmax, cumsum(allrew(3,:)),'k');
+
+
+if (false)
+    ts = load('results/ts_10000_100.mat');
+    ucb = load('results/ucb_10000_100.mat');
+    knn_ucb_old = load('results/knn_ucb_old_10000_10.mat');
+    figure;
+    plot(1:10000, cumsum(ts.allrew), '.b');
+    hold on;
+    plot(1:10000, cumsum(ucb.allrew), '.k');
+    plot(1:10000, cumsum(knn_ucb_old.allrew), '.r');
+    figure;
+    plot(1:1000, cumsum(ts.allrew(1,1:1000)), '.b');
+    hold on;
+    plot(1:1000, cumsum(ucb.allrew(1,1:1000)), '.k');
+    plot(1:1000, cumsum(knn_ucb_old.allrew(1,1:1000)), '.r');
+end
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+    % Computation time :
+    % TS -------- :  7.1236s pour tmax = 10000
+    % UCB ------- :  2.1950s pour tmax = 10000
+    % KNN_UCB_OLD : 29.452s  pour tmax = 10000    % By old I mean the resize in [0-1] is made after knn
+    % KNN_UCB_NEW :       s  pour tmax = 10000    % By new I mean the resize in [0-1] is made before knn

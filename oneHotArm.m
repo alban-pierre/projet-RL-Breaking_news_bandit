@@ -37,17 +37,24 @@ classdef oneHotArm<handle
             self.p_to_N = p_to_N;
         end
         
-        function [reward] = sample(self, s)
+        function [reward, hotState] = sample(self, s)
+            [maxh, hotState] = max(self.h,[],2);
+            if (maxh == 1)
+                hotState = 0;
+            end
             reward = self.arms{self.h(1,s), s}.sample();
             if (sum(self.h,2) == size(self.h,2))
                 if (rand(1) < sum(self.p_to_H(:)))
                     p = reshape(mnrnd(1,reshape(self.p_to_H,1,prod(size(self.p_to_H)))./sum(self.p_to_H(:))),size(self.p_to_H));
                     self.h(1,sum(p,1)*(1:size(p,2))') = 1+(1:size(p,1))*sum(p,2);
+                    %self.h
+                    %disp(['Entering hot state ', num2str(sum(p,1)*(1:size(p,2))')]);
                 end
             else
                 [~,n] = max(self.h,[],2);
                 if (rand(1) < self.p_to_N(self.h(1,n)-1,n))
                     self.h(1,n) = 1;
+                    %disp('Leaving hot state');
                 end
             end
         end

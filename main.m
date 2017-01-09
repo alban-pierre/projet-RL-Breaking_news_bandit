@@ -13,18 +13,10 @@ gaussian = 1;
 
 
 % One arm can became hot at the same time
-MAB1 = oneHotArm(repmat(gaussian,2,3),
-                 [2,3,1;70,50,80],
-                 ones(2,3),
-                 ones(1,3)/100,
-                 ones(1,3)/10);
+MAB1 = oneHotArm(repmat(gaussian,2,3),[2,3,1;70,50,80],ones(2,3),ones(1,3)/100,ones(1,3)/10);
 
 % Many arms can became hot at the same time, more than 10 times slower
-MAB2 = severalHotArms(ones(1,3),
-                      repmat(gaussian,2,3),
-                      [0.2,0.3,0.1;0.7,0.5,0.8],
-                      ones(2,3),
-                      repmat([0.99,0.01;0.1,0.9],[1,1,3]));
+MAB2 = severalHotArms(ones(1,3),repmat(gaussian,2,3),[0.2,0.3,0.1;0.7,0.5,0.8],ones(2,3),repmat([0.99,0.01;0.1,0.9],[1,1,3]));
 
 % Plot arms rewards, and the computation time of one arms sampling
 if (false)
@@ -53,25 +45,39 @@ end
 
 
 
-tmax = 10000; % KNN_UCB works efficiently for t > 2000
+tmax = 1000; % KNN_UCB works efficiently for t > 2000
 ntests = 10;
 
-allrew = zeros(1,tmax);
-tt = time();
+allrew = zeros(3,tmax);
+%tt = time();
 for i=1:ntests
+    [rew, draws] = UCB(tmax, MAB1);
+    allrew(1,:) = allrew(1,:) + rew;
     %[rew, draws] = TS(tmax, MAB1);
     %allrew(1,:) = allrew(1,:) + rew;
     %[rew, draws] = TSvar(1000, MAB1);
     %allrew(1,:) = allrew(1,:) + rew;
     [rew, draws] = KNN_UCB_NEW(tmax, MAB1);
-    allrew(1,:) = allrew(1,:) + rew;
+    allrew(3,:) = allrew(1,:) + rew;
     %[rew, draws] = KNN_UCB_OLD(tmax, MAB1);
     %allrew(1,:) = allrew(1,:) + rew;
     %[rew, draws] = UCB(tmax, MAB1);
     %allrew(1,:) = allrew(1,:) + rew;
+    [rew, draws, hot_expected, hot_real] = UCB_BN(tmax, MAB1);
+    allrew(2,:) = allrew(2,:) + rew;
+    if(i==1)
+        figure;
+        subplot(3,1,1);
+        stairs(hot_real');
+        subplot(3,1,2);
+        stairs(hot_expected','r');
+        subplot(3,1,3);
+        stairs(hot_real'+1/10); hold on;
+        stairs(hot_expected','r');
+    end
     fprintf(2,'.');
 end
-time() - tt
+%time() - tt
 allrew = allrew./ntests;
 
 
@@ -79,9 +85,9 @@ allrew = allrew./ntests;
 
 figure;
 plot(1:tmax, cumsum(allrew(1,:)), 'b');
-%hold on;
-%plot(1:tmax, cumsum(allrew(2,:)),'r');
-%plot(1:tmax, cumsum(allrew(3,:)),'k');
+hold on;
+plot(1:tmax, cumsum(allrew(2,:)),'r');
+plot(1:tmax, cumsum(allrew(3,:)),'k');
 
 
 if (false) % Plots stored results for each algorithm

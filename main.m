@@ -17,10 +17,10 @@ gaussian = 1;
 MAB1 = oneHotArm(repmat(gaussian,2,3),[2,3,1;70,50,80],ones(2,3),ones(1,3)/100,ones(1,3)/10);
 
 % Many arms can became hot at the same time, more than 10 times slower
-MAB2 = severalHotArms(ones(1,3),
-                      repmat(gaussian,2,3),
-                      [2,3,1;70,50,80],
-                      ones(2,3),
+MAB2 = severalHotArms(ones(1,3),...
+                      repmat(gaussian,2,3),...
+                      [2,3,1;70,50,80],...
+                      ones(2,3),...
                       repmat([0.99,0.01;0.1,0.9],[1,1,3]));
 
 % I forgot to update the means for MAB2, they were different from MAB1
@@ -66,10 +66,10 @@ end
 
 
 
-tmax = 10000; % KNN_UCB works efficiently for t > 2000
+tmax = 1000; % KNN_UCB works efficiently for t > 2000
 ntests = 10;
 
-allrew = zeros(3,tmax);
+allrew = zeros(4,tmax);
 %tt = time();
 for i=1:ntests
     [rew, draws] = UCB(tmax, MAB1);
@@ -80,14 +80,16 @@ for i=1:ntests
     %allrew(1,:) = allrew(1,:) + rew;
     %[rew, draws] = GM(tmax, MAB1);
     %allrew(1,:) = allrew(1,:) + rew;
+    [rew, draws, hot_expected, hot_real] = UCB_Var(tmax, MAB1);
+    allrew(2,:) = allrew(2,:) + rew;
     [rew, draws] = KNN_UCB_NEW(tmax, MAB1);
     allrew(3,:) = allrew(3,:) + rew;
     %[rew, draws] = KNN_UCB_OLD(tmax, MAB1);
     %allrew(1,:) = allrew(1,:) + rew;
     %[rew, draws] = UCB(tmax, MAB1);
     %allrew(1,:) = allrew(1,:) + rew;
-    [rew, draws, hot_expected, hot_real] = UCB_BN(tmax, MAB1);
-    allrew(2,:) = allrew(2,:) + rew;
+    [rew, draws] = UCB_BN(tmax, MAB1);
+    allrew(4,:) = allrew(4,:) + rew;
     if(i==ntests)
         figure;
         subplot(3,1,1);
@@ -100,6 +102,7 @@ for i=1:ntests
     end
     fprintf(2,'.');
 end
+disp(' ');
 %time() - tt
 allrew = allrew./ntests;
 
@@ -112,6 +115,8 @@ plot(1:tmax, cumsum(allrew(1,:)), '.k');
 hold on;
 plot(1:tmax, cumsum(allrew(2,:)),'.m');
 plot(1:tmax, cumsum(allrew(3,:)),'.g');
+plot(1:tmax, cumsum(allrew(4,:)),'.r');
+legend('UCB','UCB\_Var', 'KNN\_UCB\_NEW', 'UCB\_BN');
 
 
 

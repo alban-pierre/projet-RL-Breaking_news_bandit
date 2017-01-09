@@ -30,5 +30,6 @@ function res = plot_expectations(hot_tr, means, tmax)
             hold on;
         end
     end
-
+    xlabel('Time since last draw');
+    ylabel('Expectation of each arm');
 end

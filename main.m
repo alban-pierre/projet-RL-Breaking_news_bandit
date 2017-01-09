@@ -26,7 +26,7 @@ MAB2 = severalHotArms(ones(1,3),
 % I forgot to update the means for MAB2, they were different from MAB1
 %MAB2 = severalHotArms(ones(1,3),repmat(gaussian,2,3),[0.2,0.3,0.1;0.7,0.5,0.8],ones(2,3),repmat([0.99,0.01;0.1,0.9],[1,1,3]));
 
-% Plot arms rewards, and the computation time of one arms sampling
+% Plot arms rewards, and the computation time of one arm sampling
 if (false)
     tt = time();
     s = zeros(3,1000);
@@ -49,6 +49,19 @@ if (false)
     time() - tt
     figure(2);
     plot(s');
+end
+
+% Plots the expectation of rewards in function of the time since the last draw
+if (false)
+    clear means;
+    means{1} = [2,70];
+    means{2} = [3,50];
+    means{3} = [1,80];
+    clear tr;
+    tr{1} = [0.99,0.01;0.1,0.9]';
+    tr{2} = [0.99,0.01;0.1,0.9]';
+    tr{3} = [0.99,0.01;0.1,0.9]';
+    plot_expectations(tr, means, 100);
 end
 
 

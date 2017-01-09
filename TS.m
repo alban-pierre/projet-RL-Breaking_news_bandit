@@ -1,7 +1,7 @@
 function [rew, draws] = TS(tmax, MAB)
 
-    % Does not work yet since rewards are not bounded by [0,1]
-    % Update : I used min and max of rewards in order to put rewards artificially between 0 and 1
+    % I used min and max of rewards in order to put rewards artificially between 0 and 1
+    % It computes only one mean for each arm, but if a hot reward is observed, it pull the expectation of that arm up, thus TS continues to draw that arm
     
     NbArms=MAB.nbArms();
 

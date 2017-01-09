@@ -2,8 +2,8 @@ function [rew, draws] = KNN_UCB_NEW(tmax, MAB, squeezed)
 
     % Decides which arm to draw based on a k-nearest neightbors of the space (x = last reward of the arm, y = time between now and the last time this arm drawn)
     % -> we compute the mean of the k=sqrt(t) nearest neighbors of the current point in each arm, and choose the maximum of this mean + UCB variance
-	% All points of the space are between 0 and (squeezed) for the reward axis, and between 0 and 1 for the time axis
-	
+    % All points of the space are between 0 and (squeezed) for the reward axis, and between 0 and 1 for the time axis
+    
     if (nargin < 3)
         squeezed = 1;
     end
@@ -36,7 +36,7 @@ function [rew, draws] = KNN_UCB_NEW(tmax, MAB, squeezed)
         end
     end
 
-	% Put rewards between 0 and (squeezed)
+    % Put rewards between 0 and (squeezed)
     rmin = min(rew(1,1:NbArms*2),[],2);
     rmax = max(rew(1,1:NbArms*2),[],2);
     for i=1:NbArms

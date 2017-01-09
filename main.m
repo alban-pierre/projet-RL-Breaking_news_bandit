@@ -15,6 +15,8 @@ gaussian = 1;
 
 % One arm can became hot at the same time
 MAB1 = oneHotArm(repmat(gaussian,2,3),[2,3,1;70,50,80],ones(2,3),ones(1,3)/100,ones(1,3)/10);
+%MAB1 = oneHotArm(repmat(gaussian,3,5),[2,3,7,5,6;70,50,60,20,80;40,90,50,30,70],randi(5,3,5),randi(3,3-1,5)/100,randi(3,3-1,5)/10);
+
 
 % Many arms can became hot at the same time, more than 10 times slower
 MAB2 = severalHotArms(ones(1,3),
@@ -70,7 +72,7 @@ tmax = 10000; % KNN_UCB works efficiently for t > 2000
 ntests = 10;
 
 allrew = zeros(3,tmax);
-%tt = time();
+tt = time();
 for i=1:ntests
     [rew, draws] = UCB(tmax, MAB1);
     allrew(1,:) = allrew(1,:) + rew;
@@ -82,6 +84,8 @@ for i=1:ntests
     %allrew(1,:) = allrew(1,:) + rew;
     [rew, draws] = KNN_UCB_NEW(tmax, MAB1);
     allrew(3,:) = allrew(3,:) + rew;
+    %[rew, draws] = NND_UCB(tmax, MAB1);
+    %allrew(3,:) = allrew(3,:) + rew;
     %[rew, draws] = KNN_UCB_OLD(tmax, MAB1);
     %allrew(1,:) = allrew(1,:) + rew;
     %[rew, draws] = UCB(tmax, MAB1);
@@ -100,7 +104,7 @@ for i=1:ntests
     end
     fprintf(2,'.');
 end
-%time() - tt
+time() - tt
 allrew = allrew./ntests;
 
 

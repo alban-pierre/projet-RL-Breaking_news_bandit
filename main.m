@@ -1,3 +1,5 @@
+% Main file, run it to create arms and run RL algorithms (TS, UCB, KNN_UCB)
+
 
 isMatlab = exist('OCTAVE_VERSION', 'builtin') == 0;
 if (~isMatlab)
@@ -7,10 +9,10 @@ end
 
 addpath('knn/');
 
-gaussian = 1;
+gaussian = 1; 
 
 
-% One arms can became hot at the same time
+% One arm can became hot at the same time
 MAB1 = oneHotArm(repmat(gaussian,2,3),
                  [2,3,1;70,50,80],
                  ones(2,3),
@@ -24,6 +26,7 @@ MAB2 = severalHotArms(ones(1,3),
                       ones(2,3),
                       repmat([0.99,0.01;0.1,0.9],[1,1,3]));
 
+% Plot arms rewards, and the computation time of one arms sampling
 if (false)
     tt = time();
     s = zeros(3,1000);
@@ -48,6 +51,8 @@ if (false)
     plot(s');
 end
 
+
+
 tmax = 10000; % KNN_UCB works efficiently for t > 2000
 ntests = 10;
 
@@ -70,7 +75,7 @@ time() - tt
 allrew = allrew./ntests;
 
 
-save('results/knn_ucb_new_10000_10.mat', 'allrew');
+%save('results/knn_ucb_new_10000_10.mat', 'allrew');
 
 figure;
 plot(1:tmax, cumsum(allrew(1,:)), 'b');
@@ -79,7 +84,7 @@ plot(1:tmax, cumsum(allrew(1,:)), 'b');
 %plot(1:tmax, cumsum(allrew(3,:)),'k');
 
 
-if (false)
+if (false) % Plots stored results for each algorithm
     ts = load('results/ts_10000_100.mat');
     ucb = load('results/ucb_10000_100.mat');
     knn_ucb_old = load('results/knn_ucb_old_10000_10.mat');
@@ -107,4 +112,4 @@ end
     % TS -------- :  7.1236s pour tmax = 10000
     % UCB ------- :  2.1950s pour tmax = 10000
     % KNN_UCB_OLD : 29.452s  pour tmax = 10000    % By old I mean the resize in [0-1] is made after knn
-    % KNN_UCB_NEW :       s  pour tmax = 10000    % By new I mean the resize in [0-1] is made before knn
+    % KNN_UCB_NEW : 25.389s  pour tmax = 10000    % By new I mean the resize in [0-1] is made before knn

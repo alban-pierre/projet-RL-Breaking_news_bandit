@@ -29,11 +29,32 @@
 \maketitle
 
 \begin{abstract}
-Multi-armed bandit is a very common problems, studied with many different approachs. Besides, it is also derived in many ways, here we focus on a variation called Multi-armed bandit, when one arm can have suddenly a high reward : this arm stays hot for a time before it comes back to normal.
+Multi-armed bandit is a very common problems, studied with many different approachs. Besides, it is also derived in many ways, here we focus on a variation called multi-armed bandit, when one arm can have suddenly a high reward : this arm stays hot for a time before it comes back to normal.
 \end{abstract}
 
 \section{Introduction}
 
+Among differences from the classic multi armed bandit, the expectation can become very high compared to normal rewards, so an algorithm should keep pulling the same arm if it is hot. When no arms is hot, the algorithm should pull each arm frequently in order to find a new breaking new. But during that time, the algorithm should also maximize its reward, because each arm does not hove the same 'normal' reward. We implemented several algorithms that have similar behaviors : in the first section, we explain data generation and then in second part the widely used Thompson Sampling and Upper Confidence Bound algorithms. Then we focus on an exact but very slow algorithm (GM) in part three. In section four we explain an algorithm that tries to detect whether we have a hot state based on maximum/minimum previous rewards and in the next part based on the previous rewards variance. Then in part six we moved on an algorithm based on nearest neighbors. Eventually in the seven section we provide more results for different problems.
+
+
+
+\section{Data generation}
+
+-
+
+\section{Thompson-Sampling and Upper Confidence Bound Algorithms}
+
+\section{Exact probabilities inference with Gaussian Mixture}
+
+\section{UCB\_BN}
+
+\section{UCB\_Var}
+
+\section{Nearest Neighbors Upper Confidence Bound Algorithms}
+
+\section{Time of computation and results other different arms settings}
+
+\section{Conclusion}
 
 
 

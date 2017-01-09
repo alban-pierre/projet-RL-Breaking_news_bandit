@@ -1,6 +1,12 @@
 function [rew, draws] = GM(tmax, MAB)
 
     % Computes the exact model probabilities
+    % Computes a gaussian mixture to evaluate the means of normal and hot states
+    % Make an estimation of transition probabilities
+    % Compute the expectation of one arm given the last time is was drawn
+    % Take the arm giving the best expectation with proba 0.9
+    
+    warning('off', 'all'); % EM divides by 0 if no hot state is observed, ie in the beginning.
     
     NbArms=MAB.nbArms();
 
@@ -46,7 +52,7 @@ function [rew, draws] = GM(tmax, MAB)
     end
     
     while (tt < tmax)
-        fprintf(2, '.');
+        %fprintf(2, '.');
         
         best = zeros(1,NbArms);
         if (mod(tt,em_recomputation_step) == 0)
@@ -80,6 +86,8 @@ function [rew, draws] = GM(tmax, MAB)
         ta = ta + 1;
         tt = tt + 1;
     end
+
+    warning('on', 'all');
     
 end
 

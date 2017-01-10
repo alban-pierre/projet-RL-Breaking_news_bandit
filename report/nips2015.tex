@@ -130,12 +130,12 @@ of Breaking News Bandit.
 \section{Breaking News MAB Algorithms}
 \subsection{Exact probabilities inference with Gaussian Mixture}
 
-This first algorithm tries to be mathematically exact : we use a Gaussian mixture model using the Expectation-Maximisation algorithm to compute the mean of each state of each arm. Then given these means (and variances) we compute the probability for each observed reward to come from one state. This gives for each state of each arm a sequence of probabilities. With these sequences we compute the transition probabilities via a gradient descent. Thus, given the means and the transition probabilities, we can compute the expectation of each arm.
+This first algorithm tries to be mathematically exact : we use a Gaussian mixture model using the Expectation-Maximisation algorithm to compute the mean of each state of each arm. Then, given these means (and variances), we compute the probability for each observed reward to come from one state. This gives for each state of each arm a sequence of probabilities. With these sequences we compute the transition probabilities via a gradient descent. Thus, given the means and the transition probabilities, we can compute the expectation of each arm.
 \newline
 
 In practice, we add an exploration term to force the algorithm to explore, but even with that it does not lead to better results than Thompson-Sampling. The reason of that poor result is that when we compute the expectation of each arm, a little change in transition probabilities leads to a huge change in the expectation of an arm (at least if this arm was not seen for a few time).
 
-Figure 2 shows the exact expectation of an arm as a function of the time since the last draw. There are 2 curves for each arm because here each arm has 2 states (hot or not). Thus for one arm the upper curve is the expectation of that arm if the last time we draw it it was in the hot state, and the lower curve is the expectation of that arm if the last time we draw it it was in the normal state. The 2 curves converge because if we don't pull an arm for a long time, the probability to be hot is the same, whether it was hot or not the last time we draw that arm.
+Figure 2 shows the exact expectation of an arm as a function of the time since the last draw. There are 2 curves for each arm because, here, each arm has 2 states (hot or not). Thus for one arm the upper curve is the expectation of that arm if the last time we draw it it was in the hot state, and the lower curve is the expectation of that arm if the last time we draw it it was in the normal state. The 2 curves converge because if we don't pull an arm for a long time, the probability to be hot is the same, whether it was hot or not the last time we draw that arm.
 
 So in the case of the Gaussian Mixture algorithm, this is the plateau on the right that moves a lot due to approximations in transition probabilities, and then the outcome of the general algorithm is changed.
 
@@ -148,7 +148,7 @@ So in the case of the Gaussian Mixture algorithm, this is the plateau on the rig
 	\caption{Expectation of each arm as a function of time since the last draw}
 \end{figure}
 
-Besides, this plot gives insight of what algorithms should do : if an arm is in the hot state, the expectation is high so this algorithm should pull the same arm over and over until it is not hot anymore. When this hot arm become normal, the other arms were not pulled since a long time, so we are far on the right for these arms. Then we should chose the one that has the highest plateau. If this arm is not hot, then the expectation of this arm falls back to the beginning of the curve (on the bottom left). The expectation of the last arm not drawn is still on the plateau (so relatively high compared to other arms) and we should pull that arm.
+Besides, this plot gives insight of what algorithms should do : if an arm is in the hot state, the expectation is high so this algorithm should pull the same arm over and over until it is not hot anymore. When this hot arm becomes normal, the other arms were not pulled since a long time, so we are far on the right for these arms. Then we should chose the one that has the highest plateau. If this arm is not hot, then the expectation of this arm falls back to the beginning of the curve (on the bottom left). The expectation of the last arm not drawn is still on the plateau (so relatively high compared to other arms) and we should pull that arm.
 
 Note that if all arms are normal, this plot gives an optimal sequence of draws : as we select the highest point, the points not selected step by one unit on the right, thus increasing. And we repeat taking the highest point. Thus the arm with the lowest normal reward is not selected offenly since it has to increase more to become the highest point.
 
@@ -337,10 +337,20 @@ Here again the KNN\_LONG algorithm takes advantage for having a long term expect
 \clearpage
 \section{Conclusion}
 
-We have shown that for the special case of multi armed bandit problem where an arm can become hot and have a big reward, classical algorithms like Thompson Sampling or Upper Confidence Bound misses high rewards as they explore less and less across time.
+We have shown that for the special case of multi armed bandit problems where an arm can become hot and have a big reward temporarily, classical algorithms like Thompson Sampling or Upper Confidence Bound miss high rewards as they explore less and less across time.
 
-To tackle this problem, we have tried to use the variance and the maximum of previous rewards of an arm to calculate when an arm is hot, then pulling always the hot arm. This lead to good results, but they don't improve over time. We have also used an algorithm that uses a Monte-Carlo approximation of expectation, it perform better in the end but it has a very long initialization phase.
+To tackle this problem, we have tried to use the variance and the maximum of previous rewards of an arm to estimate when an arm is hot, then pulling always the hot arm. This lead to good results, but they don't improve over time. We have also used an algorithm that uses a Monte-Carlo approximation of expectation, it performs better in the end but it has a very long initialization phase.
 
-In the case where many hot arms can become hot simultaneously, we have shown that an algorithm that pulls arms according to the maximum of its expectation over many following draws can perform better than greedy algorithms over the next draw. But it has still difficulties to get a significantly better result, and it could be interesting for further research to develop an algorithm that compute some sort of fixed point - just like figure 2 but with a reward over many following draws - to get the best greedy policy.
+In the case where many hot arms can become hot simultaneously, we have shown that an algorithm that pulls arms according to the maximum of its expectation over many following draws can perform better than greedy algorithms over the next draw. But it has still difficulties to get a significantly better result, and it could be interesting for further research to develop an algorithm that computes some sort of fixed point - just like figure 2 but with a reward over many following draws - to get the best greedy policy.
+
+
+\subsubsection*{References}
+
+
+\small{
+[1] Auer, P., Cesa-Bianchi, N., & Fischer, P. (2002). Finite-time analysis of the multiarmed bandit problem. Machine learning, 47(2-3), 235-256.
+
+[2] Agrawal, S., & Goyal, N. (2012, June). Analysis of Thompson Sampling for the Multi-armed Bandit Problem. In COLT (pp. 39-1).
+}
 
 \end{document}

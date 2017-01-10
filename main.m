@@ -14,16 +14,14 @@ gaussian = 1;
 
 
 % One arm can became hot at the same time
-MAB1 = oneHotArm(repmat(gaussian,2,3),[2,3,1;70,50,80],ones(2,3),ones(1,3)/100,ones(1,3)/10);
-%MAB1 = oneHotArm(repmat(gaussian,3,5),[2,3,7,5,6;70,50,60,20,80;40,90,50,30,70],randi(5,3,5),randi(3,3-1,5)/100,randi(3,3-1,5)/10);
+%MAB1 = oneHotArm(repmat(gaussian,2,3),[2,3,1;70,50,80],ones(2,3),ones(1,3)/100,ones(1,3)/10);
+MAB1 = oneHotArm(repmat(gaussian,3,5),[2,3,7,5,6;70,50,60,20,80;40,90,50,30,70],randi(5,3,5),randi(3,3-1,5)/100,randi(3,3-1,5)/10);
 
 
 % Many arms can became hot at the same time, more than 10 times slower
-MAB2 = severalHotArms(ones(1,3),...
-                      repmat(gaussian,2,3),...
-                      [2,3,1;70,50,80],...
-                      ones(2,3),...
-                      repmat([0.99,0.01;0.1,0.9],[1,1,3]));
+MAB2 = severalHotArms(ones(1,3), repmat(gaussian,2,3), [2,3,1;70,50,80], ones(2,3), repmat([0.99,0.01;0.1,0.9],[1,1,3]));
+%MAB2 = severalHotArms(ones(1,5), repmat(gaussian,3,5), [2,3,7,5,6;70,50,60,20,80;40,90,50,30,70], randi(5,3,5), repmat([0.97,0.02,0.01;0.97,0.01,0.02;0.1,0.1,0.8],[1,1,5]));
+
 
 % I forgot to update the means for MAB2, they were different from MAB1
 %MAB2 = severalHotArms(ones(1,3),repmat(gaussian,2,3),[0.2,0.3,0.1;0.7,0.5,0.8],ones(2,3),repmat([0.99,0.01;0.1,0.9],[1,1,3]));
@@ -69,12 +67,12 @@ end
 
 
 tmax = 10000; % KNN_UCB works efficiently for t > 2000
-ntests = 1;
+ntests = 5;
 
 allrew = zeros(5,tmax);
 tt = time();
 for i=1:ntests
-    [rew, draws] = UCB(tmax, MAB1);
+    [rew, draws] = UCB(tmax, MAB2);
     allrew(1,:) = allrew(1,:) + rew;
     %[rew, draws] = TS(tmax, MAB1);
     %allrew(1,:) = allrew(1,:) + rew;
@@ -82,11 +80,11 @@ for i=1:ntests
     %allrew(1,:) = allrew(1,:) + rew;
     %[rew, draws] = GM(tmax, MAB1);
     %allrew(1,:) = allrew(1,:) + rew;
-    [rew, draws, hot_expected, hot_real] = UCB_Var(tmax, MAB1);
+    [rew, draws, hot_expected, hot_real] = UCB_Var(tmax, MAB2);
     allrew(2,:) = allrew(2,:) + rew;
-    [rew, draws] = KNN_UCB_NEW(tmax, MAB1);
+    [rew, draws] = KNN_UCB_NEW(tmax, MAB2);
     allrew(3,:) = allrew(3,:) + rew;
-    [rew, draws] = KNN_UCB_LONG(tmax, MAB1);
+    [rew, draws] = KNN_UCB_LONG(tmax, MAB2);
     allrew(5,:) = allrew(5,:) + rew;
     %[rew, draws] = NND_UCB(tmax, MAB1);
     %allrew(3,:) = allrew(3,:) + rew;
@@ -94,7 +92,7 @@ for i=1:ntests
     %allrew(1,:) = allrew(1,:) + rew;
     %[rew, draws] = TS(tmax, MAB1);
     %allrew(1,:) = allrew(1,:) + rew;
-    [rew, draws] = UCB_BN(tmax, MAB1);
+    [rew, draws] = UCB_BN(tmax, MAB2);
     allrew(4,:) = allrew(4,:) + rew;
     if(false)%(i==ntests)
         figure;
@@ -123,7 +121,34 @@ plot(1:tmax, cumsum(allrew(2,:)), '-r', 'linewidth', 3);
 plot(1:tmax, cumsum(allrew(3,:)), '-g', 'linewidth', 3);
 plot(1:tmax, cumsum(allrew(4,:)), '-m', 'linewidth', 3);
 plot(1:tmax, cumsum(allrew(5,:)), '-', 'Color',[.0 .5 .0], 'linewidth', 3);
-legend('UCB','VAR', 'KNN', 'BN', 'KNN\_LONG', 'location', 'southeast');
+title('Several hot arms model, with 3 arms of 2 states each');
+xlabel('Iterations');
+ylabel('Cumulative rewards');
+legend('UCB','UCB\_VAR', 'UCB\_KNN', 'UCB\_MAX', 'KNN\_LONG', 'location', 'southeast');
+
+figure;
+plot(1:tmax/10, cumsum(allrew(1,1:1000)), '-k', 'linewidth', 3);
+hold on;
+plot(1:tmax/10, cumsum(allrew(2,1:1000)), '-r', 'linewidth', 3);
+plot(1:tmax/10, cumsum(allrew(3,1:1000)), '-g', 'linewidth', 3);
+plot(1:tmax/10, cumsum(allrew(4,1:1000)), '-m', 'linewidth', 3);
+plot(1:tmax/10, cumsum(allrew(5,1:1000)), '-', 'Color',[.0 .5 .0], 'linewidth', 3);
+title('Several hot arms model, with 3 arms of 2 states each');
+xlabel('Iterations');
+ylabel('Cumulative rewards');
+legend('UCB','UCB\_VAR', 'UCB\_KNN', 'UCB\_MAX', 'KNN\_LONG', 'location', 'southeast');
+
+figure;
+plot(1:tmax/10, cumsum(allrew(1,9001:10000)), '-k', 'linewidth', 3);
+hold on;
+plot(1:tmax/10, cumsum(allrew(2,9001:10000)), '-r', 'linewidth', 3);
+plot(1:tmax/10, cumsum(allrew(3,9001:10000)), '-g', 'linewidth', 3);
+plot(1:tmax/10, cumsum(allrew(4,9001:10000)), '-m', 'linewidth', 3);
+plot(1:tmax/10, cumsum(allrew(5,9001:10000)), '-', 'Color',[.0 .5 .0], 'linewidth', 3);
+title('Several hot arms model, with 3 arms of 2 states each, 1000 last iterations over 10000');
+xlabel('Iterations');
+ylabel('Cumulative rewards');
+legend('UCB','UCB\_VAR', 'UCB\_KNN', 'UCB\_MAX', 'KNN\_LONG', 'location', 'southeast');
 
 
 
@@ -151,7 +176,7 @@ if (false) % Plots stored results for each algorithm
     title('One hot arm model');
     xlabel('Iterations');
     ylabel('Cumulative rewards');
-    legend('TS (100 runs)', 'UCB (100 runs)', 'KNN (100 runs)', 'GM (1 run)', 'BN (100 runs)', 'VAR (100 runs)', 'KNN\_LONG (100runs)', 'location', 'southeast');
+    legend('TS (100 runs)', 'UCB (100 runs)', 'UCB\_KNN (100 runs)', 'GM (1 run)', 'UCB\_MAX (100 runs)', 'UCB\_VAR (100 runs)', 'KNN\_LONG (100runs)', 'location', 'southeast');
     figure;
     plot(1:1000, cumsum(ts.allrew(1,1:1000)), '-b', 'linewidth', 3);
     hold on;
@@ -166,7 +191,7 @@ if (false) % Plots stored results for each algorithm
     title('One hot arm model');
     xlabel('Iterations');
     ylabel('Cumulative rewards');
-    legend('TS (100 runs)', 'UCB (100 runs)', 'KNN (100 runs)', 'GM (1 run)', 'BN (100 runs)', 'VAR (100 runs)', 'KNN\_LONG (100runs)', 'location', 'southeast');
+    legend('TS (100 runs)', 'UCB (100 runs)', 'UCB\_KNN (100 runs)', 'GM (1 run)', 'UCB\_MAX (100 runs)', 'UCB\_VAR (100 runs)', 'KNN\_LONG (100runs)', 'location', 'southeast');
     figure;
     plot(1:1000, cumsum(ts.allrew(1,9001:10000)), '-b', 'linewidth', 3);
     hold on;
@@ -181,7 +206,7 @@ if (false) % Plots stored results for each algorithm
     title('One hot arm model, 1000 last iterations over 10000');
     xlabel('Iterations');
     ylabel('Cumulative rewards');
-    legend('TS (100 runs)', 'UCB (100 runs)', 'KNN (100 runs)', 'GM (1 run)', 'BN (100 runs)', 'VAR (100 runs)', 'KNN\_LONG (100runs)', 'location', 'southeast');
+    legend('TS (100 runs)', 'UCB (100 runs)', 'UCB\_KNN (100 runs)', 'GM (1 run)', 'UCB\_MAX (100 runs)', 'UCB\_VAR (100 runs)', 'KNN\_LONG (100runs)', 'location', 'southeast');
     
     % Multiple hot arms
     ts = load('results/ts_m_10000_100.mat');
@@ -223,7 +248,7 @@ end
     % UCB -------- :    2.1950s pour tmax = 10000
     % KNN_UCB_OLD  :   29.452s  pour tmax = 10000    % By old I mean the resize in [0-1] is made after knn
     % KNN_UCB_NEW  :   25.389s  pour tmax = 10000    % By new I mean the resize in [0-1] is made before knn
-    % KNN_UCB_LONG :   35.853s  pour tmax = 10000    % By new I mean the resize in [0-1] is made before knn
+    % KNN_UCB_LONG :   35.853s  pour tmax = 10000
     % GM --------- : 1000.5s    pour tmax = 10000
     % UCB_BN ----- :    3.0577s pour tmax = 10000
     % UCN_VAR ---- :    5.3674s pour tmax = 10000

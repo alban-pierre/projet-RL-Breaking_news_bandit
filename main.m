@@ -68,8 +68,8 @@ end
 
 
 
-tmax = 1000; % KNN_UCB works efficiently for t > 2000
-ntests = 10;
+tmax = 10000; % KNN_UCB works efficiently for t > 2000
+ntests = 100;
 
 allrew = zeros(4,tmax);
 %tt = time();
@@ -120,7 +120,7 @@ hold on;
 plot(1:tmax, cumsum(allrew(2,:)),'.m');
 plot(1:tmax, cumsum(allrew(3,:)),'.g');
 plot(1:tmax, cumsum(allrew(4,:)),'.r');
-legend('UCB','UCB\_Var', 'KNN\_UCB\_NEW', 'UCB\_BN');
+legend('UCB','UCB\_Var', 'KNN\_UCB\_NEW', 'UCB\_BN', 'location', 'southeast');
 
 
 
@@ -128,34 +128,37 @@ if (false) % Plots stored results for each algorithm
     % One hot arms
     ts = load('results/ts_10000_100.mat');
     ucb = load('results/ucb_10000_100.mat');
-    knn_ucb_old = load('results/knn_ucb_old_10000_10.mat');
-    knn_ucb_new = load('results/knn_ucb_new_10000_10.mat');
+    %knn_ucb_old = load('results/knn_ucb_old_10000_10.mat');
+    knn_ucb_new = load('results/knn_ucb_new_10000_100.mat');
     gm = load('results/gm_10000_1.mat');
     ucb_bn = load('results/ucb_bn_10000_100.mat');
+    ucb_var = load('results/ucb_var_10000_100.mat');
     figure;
     plot(1:10000, cumsum(ts.allrew), '.b');
     hold on;
     plot(1:10000, cumsum(ucb.allrew), '.k');
-    plot(1:10000, cumsum(knn_ucb_old.allrew), '.r');
+    %plot(1:10000, cumsum(knn_ucb_old.allrew), '.r');
     plot(1:10000, cumsum(knn_ucb_new.allrew), '.g');
     plot(1:10000, cumsum(gm.allrew), '.c');
     plot(1:10000, cumsum(ucb_bn.allrew), '.m');
+    plot(1:10000, cumsum(ucb_var.allrew), '.r');
     title('One hot arm model');
     xlabel('Iterations');
     ylabel('Cumulative rewards');
-    legend('TS', 'UCB', 'KNN-0', 'KNN-1', 'GM', 'BN', 'location', 'southeast');
+    legend('TS (100 runs)', 'UCB (100 runs)', 'KNN (100 runs)', 'GM (1 run)', 'BN (100 runs)', 'VAR (100 runs)', 'location', 'southeast');
     figure;
     plot(1:1000, cumsum(ts.allrew(1,1:1000)), '.b');
     hold on;
     plot(1:1000, cumsum(ucb.allrew(1,1:1000)), '.k');
-    plot(1:1000, cumsum(knn_ucb_old.allrew(1,1:1000)), '.r');
+    %plot(1:1000, cumsum(knn_ucb_old.allrew(1,1:1000)), '.r');
     plot(1:1000, cumsum(knn_ucb_new.allrew(1,1:1000)), '.g');
     plot(1:1000, cumsum(gm.allrew(1,1:1000)), '.c');
     plot(1:1000, cumsum(ucb_bn.allrew(1,1:1000)), '.m');
+    plot(1:1000, cumsum(ucb_var.allrew(1,1:1000)), '.r');
     title('One hot arm model');
     xlabel('Iterations');
     ylabel('Cumulative rewards');
-    legend('TS', 'UCB', 'KNN-0', 'KNN-1', 'GM', 'BN', 'location', 'southeast');
+    legend('TS (100 runs)', 'UCB (100 runs)', 'KNN (100 runs)', 'GM (1 run)', 'BN (100 runs)', 'VAR (100 runs)', 'location', 'southeast');
     
     % Multiple hot arms
     ts = load('results/ts_m_10000_100.mat');
@@ -198,7 +201,8 @@ end
     % KNN_UCB_OLD :   29.452s  pour tmax = 10000    % By old I mean the resize in [0-1] is made after knn
     % KNN_UCB_NEW :   25.389s  pour tmax = 10000    % By new I mean the resize in [0-1] is made before knn
     % GM -------- : 1000.5s    pour tmax = 10000
-    % BN -------- :    3.0577s pour tmax = 10000
+    % UCB_BN ---- :    3.0577s pour tmax = 10000
+    % UCN_VAR --- :    5.1484s pour tmax = 10000
 
 
     % Computation time : (Several hot arm)

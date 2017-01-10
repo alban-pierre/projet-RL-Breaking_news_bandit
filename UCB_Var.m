@@ -1,6 +1,5 @@
 function [rew, draws, hot_expected, hot_real] = UCB_Var(tmax, MAB)
     %UCB for Breaking News bandit (one hot arm) with inference of variance
-    % Does not work yet since rewards are not bounded by [0,1]
     % Update : I used min and max of rewards in order to put rewards artificially between 0 and 1
 
     

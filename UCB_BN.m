@@ -1,6 +1,5 @@
 function [rew, draws, hot_expected, hot_real] = UCB_BN(tmax, MAB)
-    %UCB for Breaking News bandit (one hot arm)
-    % Does not work yet since rewards are not bounded by [0,1]
+    %UCB_Max algorithm for Breaking News bandit (one hot arm)
     % Update : I used min and max of rewards in order to put rewards artificially between 0 and 1
 
     

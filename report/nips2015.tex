@@ -169,30 +169,31 @@ Here we show the results of each algorithms presented in last sections on the mu
 		%\fbox{\rule[-.5cm]{0cm}{4cm} \rule[-.5cm]{4cm}{0cm}}
 		\includegraphics[width=1.0\textwidth]{all_10000it.png}
 	\end{center}
-	\caption{All algorithms for 10000 iterations}
+	\caption{All algorithms for 10000 iterations (3 arms * 2 states, at most one hot arm)}
 \end{figure}
 
 \begin{figure}[h]
 	\begin{minipage}[b]{.49\linewidth}
 		\includegraphics[width=1.0\textwidth]{begin_1000it.png}
-		\caption{1000 first iterations}
+		\caption{1000 first iterations (3*2, one)}
 	\end{minipage}
 	\hfill
-	\begin{minipage}[b]{0.48\linewidth}
+	\begin{minipage}[b]{0.49\linewidth}
 		\includegraphics[width=1.0\textwidth]{last_1000it.png}
-		\caption{1000 last iterations}
+		\caption{1000 last iterations (3*2, one)}
 	\end{minipage}
 	\label{fig:f}
 \end{figure}
 
 Here are the computation time observed for 10000 iterations : 
 \begin{center}
-	\begin{tabular}{rcccccc}
-		Arms : & TS & UCB & GM & KNN & UCB\_BN & UCB\_VAR \\
-		Time (sec) : & 7.12 & 2.19 & 1000.5 & 25.39 & 3.06 & 5.37
+	\begin{tabular}{rccccccc}
+		Arms : & TS & UCB & GM & UCB\_KNN & KNN\_LONG & UCB\_MAX & UCB\_VAR \\
+		Time (sec) : & 7.12 & 2.19 & 1000.5 & 25.39 & 35.85 & 3.06 & 5.37
 	\end{tabular}
 \end{center}
 
+\clearpage
 We also tried for data where several arms can become hot at the same time (with approximately the same transition probabilities) :
 
 \begin{figure}[h]
@@ -205,18 +206,19 @@ We also tried for data where several arms can become hot at the same time (with 
 \end{figure}
 
 \begin{figure}[h]
-	\begin{minipage}[b]{.48\linewidth}
+	\begin{minipage}[b]{.49\linewidth}
 		\includegraphics[width=1.0\textwidth]{begin_m_1000it.png}
 		\caption{1000 first iterations}
 	\end{minipage}
 	\hfill
-	\begin{minipage}[b]{0.48\linewidth}
+	\begin{minipage}[b]{0.49\linewidth}
 		\includegraphics[width=1.0\textwidth]{end_m_1000it.png}
 		\caption{1000 last iterations}
 	\end{minipage}
 	\label{fig:f}
 \end{figure}
 
+\clearpage
 Eventually we tried when there was 5 arms with 3 states each (with one hot arm at most) : 
 
 \begin{figure}[h]
@@ -225,18 +227,18 @@ Eventually we tried when there was 5 arms with 3 states each (with one hot arm a
 		%\fbox{\rule[-.5cm]{0cm}{4cm} \rule[-.5cm]{4cm}{0cm}}
 		\includegraphics[width=1.0\textwidth]{all_s_10000it.png}
 	\end{center}
-	\caption{All algorithms for 10000 iterations}
+	\caption{All algorithms for 10000 iterations (5 arms * 3 states, at most one hot arm)}
 \end{figure}
 
 \begin{figure}[h]
-	\begin{minipage}[b]{.48\linewidth}
+	\begin{minipage}[b]{.49\linewidth}
 		\includegraphics[width=1.0\textwidth]{begin_s_1000it.png}
-		\caption{1000 first iterations}
+		\caption{1000 first iterations (5*3, one)}
 	\end{minipage}
 	\hfill
-	\begin{minipage}[b]{0.48\linewidth}
-		\includegraphics[width=1.0\textwidth]{end_s_1000it.png}
-		\caption{1000 last iterations}
+	\begin{minipage}[b]{0.49\linewidth}
+		\includegraphics[width=1.0\textwidth]{last_s_1000it.png}
+		\caption{1000 last iterations (5*3, one)}
 	\end{minipage}
 	\label{fig:f}
 \end{figure}

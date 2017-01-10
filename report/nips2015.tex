@@ -140,7 +140,16 @@ is the number of steps.
 
 \section{UCB\_Max}
 
-To avoid the quadratic complexity of the previous algorithm, 
+To avoid the quadratic complexity of the previous algorithm, we choose to not compute
+the actual variance $\hat\sigma_a(t)$, but instead simply remember the maximal value
+observed on each arm $M_a(t)$ (and for a hot state, the minimal value $m_a(t)$).
+At each step, we now check whether $r(t) > M_a(t)$ (or whether $r(t) < m_a(t)$ for a hot state),
+and if it is the case then we consider that arm $a$ entered the hot state (or left the hot state)
+and we reinitialise $\hat\mu_a(t)$ (or take back the old value).
+
+This algorithm does not have results as good as UCB\_Var, but it faster and only have
+a linear complexity, since computing the mean $\hat\mu_a(t)$ and the max $M_a(t)$
+can be done with a finite number of operations at each step. 
 
 \section{Nearest Neighbors Upper Confidence Bound Algorithms}
 
@@ -185,7 +194,7 @@ Here we show the results of each algorithms presented in last sections on the mu
 	\label{fig:f}
 \end{figure}
 
-Here are the computation time observed for 10000 iterations : 
+Here are the computation time observed for 10000 iterations :
 \begin{center}
 	\begin{tabular}{rccccccc}
 		Arms : & TS & UCB & GM & UCB\_KNN & KNN\_LONG & UCB\_MAX & UCB\_VAR \\

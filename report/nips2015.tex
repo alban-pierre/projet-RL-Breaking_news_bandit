@@ -8,7 +8,7 @@
 \usepackage{microtype}      % microtypography
 \usepackage{amsmath}
 \usepackage{caption}
-%\usepackage[ruled,vlined]{algorithm2e}
+\usepackage[ruled,vlined]{algorithm2e}
 \usepackage{graphicx}
 %\documentstyle[nips14submit_09,times,art10]{article} % For LaTeX 2.09
 
@@ -96,7 +96,23 @@ For the last section, we also used a model where several arms can become hot at 
 In this section, we recall the widely used Upper Confidence Bound (UCB) Algorithm,
 as described in [1],
 that seeks to optimize the reward in the case of a regular MAB problem. The main
-idea is to compute
+idea is to compute an expected mean for each arm $\hat\mu_a(t)$, upper bounding it
+by a confidence on the mean being high for arms that haven't been drawn often. We
+then draw the arm with the highest upper bound.
+This way we make sure that every arm is used from time to time.
+\begin{equation*}
+	a^* = argmax_{a} \Big(\hat\mu_a(t) + \sqrt{\frac{log(t)}{2N_a(t)}}\Big)
+\end{equation*}
+
+\begin{algorithm}
+	\caption{UCB Algorithm}
+	\For{$i=1:T_{max}$}{
+		Compute $a^* = argmax_{a} \Big(\hat\mu_a(t) + \sqrt{\frac{log(t)}{2N_a(t)}}\Big)$\;
+		Draw arm $a^*$ and receive reward $r(t)$\;
+		Update $\hat\mu_{a^*}(t+1) = \frac{N_{a^*}(t)\times \hat\mu_{a^*}(t) + r(t)}{N_{a^*}(t)+1}$\;
+		Update $N_{a^*} = N_{a^*}+1$\;
+	}
+\end{algorithm}
 
 \section{Exact probabilities inference with Gaussian Mixture}
 

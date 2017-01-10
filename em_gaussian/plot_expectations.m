@@ -21,7 +21,7 @@ function res = plot_expectations(hot_tr, means, tmax)
     end
 
     colors = ['b'; 'r'; 'k'; 'g'; 'm'; 'c'];
-    types = ['-'; '--'; '.-'; '.'];
+    types = ['.'; '.-'; '--'; '-'];
     
     figure;
     for a=1:NbArms

@@ -30,7 +30,12 @@
 \maketitle
 
 \begin{abstract}
-Multi-armed bandit is a very common problems, studied with many different approachs. Besides, it is also derived in many ways, here we focus on a variation called multi-armed bandit, when one arm can have suddenly a high reward : this arm stays hot for a time before it comes back to normal.
+Multi-armed bandit (MAB) is a very common problems, studied with many different approachs.
+Besides, it is also derived in many ways, such as adversarial bandit, non-stationary bandit or distributed bandit.
+Here we focus on a variation called
+Breaking News multi-armed bandit, when one arm can have suddenly a high reward : this arm stays hot for a time before it comes back to normal.
+In this report, we describe a model of such MABs and then expose some algorithms to maximize the rewards
+on Breaking News MABs, before testing it on our model.
 \end{abstract}
 
 \section{Introduction}
@@ -74,7 +79,7 @@ For the last section, we also used a model where several arms can become hot at 
 This first algorithm tries to be mathematically exact : we use a Gaussian mixture model using the Expectation-Maximisation algorithm to compute the mean of each state of each arm. Then given theses means (and variances) we compute the probability for each observed reward to come from one state. This gives for each state of each arm a sequence of probabilities. With theses sequence we compute the transition probabilities via a gradient descent. Thus, given the means and the transition probabilities, we can compute the expectation of each arm.
 \newline
 
-In practice, we add an exploration term to force the algorithm to explore, but even with that it does not lead to better results than Thompson-Sampling. The reason of that poor result is that when we compute the expectation of each arm, a little change in transition probabilities leads to a huge change in the expectation of an arm (at least if this arm was not seen for a few time). 
+In practice, we add an exploration term to force the algorithm to explore, but even with that it does not lead to better results than Thompson-Sampling. The reason of that poor result is that when we compute the expectation of each arm, a little change in transition probabilities leads to a huge change in the expectation of an arm (at least if this arm was not seen for a few time).
 
 Figure 3 show the exact expectation of an arm as a function of the time since the last draw. There are 2 curves for each arm because here each arm has 2 states (hot or not). Thus for one arm the upper curve is the expectation of that arm if the last time we draw it it was in the hot state, and the lower curve is the expectation of that arm if the last time we draw it it was in the normal state. The 2 curves converge because if we don't pull an arm for a long time, the probability to be hot is the same, whether it was hot or not the last time we draw that arm.
 
@@ -170,7 +175,7 @@ instructions presented here. Papers may be only up to eight pages long,
 including figures. Since 2009 an additional ninth page \textit{containing only
 cited references} is allowed. Papers that exceed nine pages will not be
 reviewed, or in any other way considered for presentation at the conference.
-%This is a strict upper bound. 
+%This is a strict upper bound.
 
 Please note that this year we have introduced automatic line number generation
 into the style file (for \LaTeXe and Word versions). This is to help reviewers
@@ -179,7 +184,7 @@ NOT refer to these line numbers in your paper as they will be removed from the
 style file for the final version of accepted papers.
 
 The margins in 2015 are the same as since 2007, which allow for $\approx 15\%$
-more words in the paper compared to earlier years. We are also again using 
+more words in the paper compared to earlier years. We are also again using
 double-blind reviewing. Both of these require the use of new style files.
 
 Authors are required to use the NIPS \LaTeX{} style files obtainable at the
@@ -188,8 +193,8 @@ not previous versions. Tweaking the style files may be grounds for rejection.
 
 %% \subsection{Double-blind reviewing}
 
-%% This year we are doing double-blind reviewing: the reviewers will not know 
-%% who the authors of the paper are. For submission, the NIPS style file will 
+%% This year we are doing double-blind reviewing: the reviewers will not know
+%% who the authors of the paper are. For submission, the NIPS style file will
 %% automatically anonymize the author list at the beginning of the paper.
 
 %% Please write your paper in such a way to preserve anonymity. Refer to
@@ -214,7 +219,7 @@ not previous versions. Tweaking the style files may be grounds for rejection.
 %%
 %% Note that your submission is only valid if you get an e-mail
 %% confirmation from the server. If you do not get such an e-mail, please
-%% try uploading again. 
+%% try uploading again.
 
 
 \subsection{Retrieval of style files}
@@ -223,7 +228,7 @@ The style files for NIPS and other conference information are available on the W
 \begin{center}
    \url{http://www.nips.cc/}
 \end{center}
-The file \verb+nips2015.pdf+ contains these 
+The file \verb+nips2015.pdf+ contains these
 instructions and illustrates the
 various formatting requirements your NIPS paper must satisfy. \LaTeX{}
 users can choose between two style files:
@@ -325,12 +330,12 @@ paper, in the \textbf{References} section. (Note: the standard
 references themselves, any style is acceptable as long as it is used
 consistently.
 
-As submission is double blind, refer to your own published work in the 
+As submission is double blind, refer to your own published work in the
 third person. That is, use ``In the previous work of Jones et al.\ [4]'',
 not ``In our previous work [4]''. If you cite your other papers that
 are not widely available (e.g.\ a journal paper under review), use
 anonymous author names in the citation, e.g.\ an author of the
-form ``A.\ Anonymous''. 
+form ``A.\ Anonymous''.
 
 
 \subsection{Footnotes}
@@ -352,7 +357,7 @@ first word and proper nouns); figures are numbered consecutively.
 Make sure the figure caption does not get separated from the figure.
 Leave sufficient space to avoid splitting the figure and figure caption.
 
-You may use color figures. 
+You may use color figures.
 However, it is best for the
 figure captions and the paper body to make sense if the paper is printed
 either in black/white or in color.
@@ -421,30 +426,30 @@ are also acceptable for NIPS. Please see
 \begin{itemize}
 
 \item Consider directly generating PDF files using \verb+pdflatex+
-(especially if you are a MiKTeX user). 
+(especially if you are a MiKTeX user).
 PDF figures must be substituted for EPS figures, however.
 
 \item Otherwise, please generate your PostScript and PDF files with the following commands:
-\begin{verbatim} 
+\begin{verbatim}
 dvips mypaper.dvi -t letter -Ppdf -G0 -o mypaper.ps
 ps2pdf mypaper.ps mypaper.pdf
 \end{verbatim}
 
-Check that the PDF files only contains Type 1 fonts. 
+Check that the PDF files only contains Type 1 fonts.
 %For the final version, please send us both the Postscript file and
-%the PDF file. 
+%the PDF file.
 
-\item xfig "patterned" shapes are implemented with 
-bitmap fonts.  Use "solid" shapes instead. 
+\item xfig "patterned" shapes are implemented with
+bitmap fonts.  Use "solid" shapes instead.
 \item The \verb+\bbold+ package almost always uses bitmap
 fonts.  You can try the equivalent AMS Fonts with command
 \begin{verbatim}
 \usepackage[psamsfonts]{amssymb}
 \end{verbatim}
- or use the following workaround for reals, natural and complex: 
+ or use the following workaround for reals, natural and complex:
 \begin{verbatim}
 \newcommand{\RR}{I\!\!R} %real numbers
-\newcommand{\Nat}{I\!\!N} %natural numbers 
+\newcommand{\Nat}{I\!\!N} %natural numbers
 \newcommand{\CC}{I\!\!\!\!C} %complex numbers
 \end{verbatim}
 
@@ -485,27 +490,27 @@ applicable.
 
 \end{itemize}
 If your file contains Type 3 fonts or non embedded TrueType fonts, we will
-ask you to fix it. 
+ask you to fix it.
 
 \subsection{Margins in LaTeX}
- 
+
 Most of the margin problems come from figures positioned by hand using
 \verb+\special+ or other commands. We suggest using the command
 \verb+\includegraphics+
 from the graphicx package. Always specify the figure width as a multiple of
 the line width as in the example below using .eps graphics
 \begin{verbatim}
-   \usepackage[dvips]{graphicx} ... 
-   \includegraphics[width=0.8\linewidth]{myfile.eps} 
+   \usepackage[dvips]{graphicx} ...
+   \includegraphics[width=0.8\linewidth]{myfile.eps}
 \end{verbatim}
 or % Apr 2009 addition
 \begin{verbatim}
-   \usepackage[pdftex]{graphicx} ... 
-   \includegraphics[width=0.8\linewidth]{myfile.pdf} 
+   \usepackage[pdftex]{graphicx} ...
+   \includegraphics[width=0.8\linewidth]{myfile.pdf}
 \end{verbatim}
-for .pdf graphics. 
-See section 4.4 in the graphics bundle documentation (\url{http://www.ctan.org/tex-archive/macros/latex/required/graphics/grfguide.ps}) 
- 
+for .pdf graphics.
+See section 4.4 in the graphics bundle documentation (\url{http://www.ctan.org/tex-archive/macros/latex/required/graphics/grfguide.ps})
+
 A number of width problems arise when LaTeX cannot properly hyphenate a
 line. Please give LaTeX hyphenation hints using the \verb+\-+ command.
 
@@ -513,15 +518,15 @@ line. Please give LaTeX hyphenation hints using the \verb+\-+ command.
 \subsubsection*{Acknowledgments}
 
 Use unnumbered third level headings for the acknowledgments. All
-acknowledgments go at the end of the paper. Do not include 
-acknowledgments in the anonymized submission, only in the 
-final paper. 
+acknowledgments go at the end of the paper. Do not include
+acknowledgments in the anonymized submission, only in the
+final paper.
 
 \subsubsection*{References}
 
 References follow the acknowledgments. Use unnumbered third level heading for
 the references. Any choice of citation style is acceptable as long as you are
-consistent. It is permissible to reduce the font size to `small' (9-point) 
+consistent. It is permissible to reduce the font size to `small' (9-point)
 when listing the references. {\bf Remember that this year you can use
 a ninth page as long as it contains \emph{only} cited references.}
 

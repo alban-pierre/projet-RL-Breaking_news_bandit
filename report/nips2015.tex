@@ -2,6 +2,13 @@
 \usepackage{nips15submit_e,times}
 \usepackage{hyperref}
 \usepackage{url}
+\usepackage{booktabs}       % professional-quality tables
+\usepackage{amsfonts}       % blackboard math symbols
+\usepackage{nicefrac}       % compact symbols for 1/2, etc.
+\usepackage{microtype}      % microtypography
+\usepackage{amsmath}
+\usepackage{caption}
+\usepackage[ruled,vlined]{algorithm2e}
 \usepackage{graphicx}
 %\documentstyle[nips14submit_09,times,art10]{article} % For LaTeX 2.09
 
@@ -98,9 +105,33 @@ Besides, this plot gives insight of what algorithms should do : if an arm is in 
 
 Note that if all arms are normal, this plot gives an optimal sequence of draws : as we select the highest point, the points not selected step by one unit on the right, thus increasing. And we repeat taking the highest point. Thus the arm with the lowest normal reward is not selected offenly since it has to increase more to become the highest point.
 
-\section{UCB\_BN}
-
 \section{UCB\_Var}
+
+In this section, we describe an algorithm based on the UCB algorithm and on an estimation of the maximal
+value that an arm can reach when it is not hot, and use this estimation to detect when the
+arm is hot. Our purpose is then to estimated from a sequence of samples on a given arm $a$ the range
+of values we expect the next sample to be in. We will then exploit the mean $\hat\mu_a(t)$ and variance $\hat\sigma_a(t)$
+estimated from the previous samples and consider that if an arm stays in its initial
+state, the reward drawn $r$ should be in the range $r \in [\hat\mu_a(t)-\hat\sigma_a(t), \hat\mu_a(t)+\hat\sigma_a(t)]$.
+
+To take into account the uncertainty on both the mean and the range we might have,
+we will add a term decreasing with the number of sample rewards we have on the arm $a$:
+\begin{equation}\label{UCB-var-bound}
+	r \in \Big[\hat\mu_a(t)-\hat\sigma_a(t)-\sqrt{\frac{1}{2N_a(t)}}, \hat\mu_a(t)+\hat\sigma_a(t)+\sqrt{\frac{1}{2N_a(t)}}\Big]
+\end{equation}
+
+The algorithm is then as follows: we proceed as in the UCB algorithm, and if at
+some time $t$ we draw a sample from an arm and the reward obtained $r(t)$ is higher than the upper bound
+in Eq.~\ref{UCB-var-bound}, we then consider that this arm is in a hot state.
+We temporarily forget the samples we've seen for this arm, and continue
+with $r(t)$ as the only reward observed so far for arm $a$. This has the effect
+of having a bigger mean $\hat\mu(t+1) = r(t)$ and having $N_a(t+1) = 1$, making this arm more suceptible
+to be drawn next time. If at some time $t'$, we observe a reward $r(t')$ lower
+than the lower bound in Eq.~\ref{UCB-var-bound}, we then consider that this arm has
+left the hot state, and proceed with the samples observed before time $t$, having
+once again a smaller mean $\hat\mu(t')$.
+
+\section{UCB\_Max}
 
 \section{Nearest Neighbors Upper Confidence Bound Algorithms}
 
@@ -132,7 +163,7 @@ Here we show the results of each algorithms presented in last sections on the mu
 	\caption{Example of generated data}
 \end{figure}
 
-Here are the computation time observed for 10000 iterations : 
+Here are the computation time observed for 10000 iterations :
 \begin{center}
 	\begin{tabular}{rcccccc}
 		Arms : & TS & UCB & GM & KNN & UCB\_BN & UCB\_VAR \\

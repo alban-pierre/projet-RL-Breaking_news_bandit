@@ -40,12 +40,12 @@
 Multi-armed bandit is a very common problems, studied with many different approachs.
 Besides, it is also derived in many ways, such as adversarial bandit, non-stationary bandit or distributed bandit.
 Here we focus on a variation called
-Breaking News multi-armed bandit, when one arm can have suddenly a high reward : this arm stays hot for a time before it comes back to normal.
+Breaking News multi-armed bandit, when one arm can have suddenly a high reward: this arm stays hot for a time before it comes back to normal.
 In this report, we describe a model of such Multi-armed Bandits and then expose some algorithms to maximize the rewards
 on Breaking News Multi-armed Bandits, before testing it on our model.
 \end{abstract}
 
-\section{Introduction}
+\section{Introduction*}
 
 The Multi-armed Bandit (MAB) is a very important problem in the of Reinforcement Learning.
 Usually, it is modeled as a set of $A$ actions, called arms, that can be used at any time,
@@ -60,17 +60,15 @@ arm while it is hot. When no arms is hot, the algorithm should pull each arm fre
 in order to find a new breaking new. But during that time, the algorithm should
 also maximize the reward, because each arm does not hove the same 'normal' reward.
 
-We implemented several algorithms that have similar behaviors : in the first
-section, we explain data generation and then in second part the widely used
-Thompson Sampling and Upper Confidence Bound algorithms. Then we focus on an
-exact but very slow algorithm (GM) in part three. In section four we explain an
-algorithm that tries to detect whether we have a hot state based on maximum/minimum
-previous rewards and in the next part based on the previous rewards variance.
-Then in part six and seven we moved on an algorithm based on nearest neighbors.
-Eventually in the eight section we provide more results for different problems.
+Our report is organized as follows: in the first
+section, we explain the model we used for data generation and in the second section, we recall the widely used
+Upper Confidence Bound algorithms for classic MAB problems. Then we describe
+several algorithms fitting the Breacking-news MAB problem.
+Eventually, in the last section we provide more results for different problems and comparison between
+the previously exposed algorithms.
 \newline
 
-Note : the code we used in our experiments is in matlab (compatible with octave) and can be found at the address : https://github.com/alban-pierre/projet-RL-Breaking\_news\_bandit
+Note: the code we used in our experiments is in matlab (compatible with octave) and can be found at the address: https://github.com/alban-pierre/projet-RL-Breaking\_news\_bandit
 
 
 \section{Data generation}

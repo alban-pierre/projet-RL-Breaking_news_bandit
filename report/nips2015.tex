@@ -114,6 +114,12 @@ This way we make sure that every arm is used from time to time.
 	}
 \end{algorithm}
 
+This algorithm is meant to be used on a regular MAB, with reward functions that do not
+change over time. In this report, we would like to take advantage of the fact that
+we know the MAB follows the model described in last section. Most of the algorithms
+we present on next section are based on the UCB algorithm, and adapted to fit our model
+of Breaking News Bandit.
+
 \section{Exact probabilities inference with Gaussian Mixture}
 
 This first algorithm tries to be mathematically exact : we use a Gaussian mixture model using the Expectation-Maximisation algorithm to compute the mean of each state of each arm. Then given theses means (and variances) we compute the probability for each observed reward to come from one state. This gives for each state of each arm a sequence of probabilities. With theses sequence we compute the transition probabilities via a gradient descent. Thus, given the means and the transition probabilities, we can compute the expectation of each arm.
@@ -203,7 +209,9 @@ In practice it does not yield to an improvement because the change in probabilit
 
 \section{Time of computation and results other different arms settings}
 
-Here we show the results of each algorithms presented in last sections on the multi armed bandit settings presented in the Data generation section :
+Here we show the results of each algorithms presented in last section on the multi
+armed bandit settings presented in the Data generation section, while comparing them
+with the results from UCB Algorithm and Thompson Sampling [2] :
 
 \begin{figure}[h]
 	\begin{center}

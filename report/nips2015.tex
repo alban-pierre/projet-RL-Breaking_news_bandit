@@ -202,8 +202,10 @@ Here are the computation time observed for 10000 iterations :
 	\end{tabular}
 \end{center}
 
+We can see that the performance of TS and UCB decrease over time, which is normal because they reduce exploration over time, and it is exploration that discovers hot states. The UCB\_KNN and KNN\_LONG increase their performance as theirs Monte-Carlo estimations are more and more precise. The UCB\_MAX and UCB\_VAR algorithms perform well in the beginning.
+
 \clearpage
-We also tried for data where several arms can become hot at the same time (with approximately the same transition probabilities) :
+We also tried for data where several arms can become hot at the same time (with approximately the same transition probabilities, 5 runs each) :
 
 \begin{figure}[h]
 	\begin{center}
@@ -211,24 +213,26 @@ We also tried for data where several arms can become hot at the same time (with 
 		%\fbox{\rule[-.5cm]{0cm}{4cm} \rule[-.5cm]{4cm}{0cm}}
 		\includegraphics[width=1.0\textwidth]{all_m_10000it.png}
 	\end{center}
-	\caption{All algorithms for 10000 iterations}
+	\caption{All algorithms for 10000 iterations (3 arms * 2 states, several hot arms)}
 \end{figure}
 
 \begin{figure}[h]
 	\begin{minipage}[b]{.49\linewidth}
 		\includegraphics[width=1.0\textwidth]{begin_m_1000it.png}
-		\caption{1000 first iterations}
+		\caption{1000 first iterations (3*2, several)}
 	\end{minipage}
 	\hfill
 	\begin{minipage}[b]{0.49\linewidth}
-		\includegraphics[width=1.0\textwidth]{end_m_1000it.png}
-		\caption{1000 last iterations}
+		\includegraphics[width=1.0\textwidth]{last_m_1000it.png}
+		\caption{1000 last iterations (3*2, several)}
 	\end{minipage}
 	\label{fig:f}
 \end{figure}
 
+We observe quite the same things except for KNN\_LONG : this algorithm sometimes tries different arms while they were on a hot arm with a comparatively low hot reward. The other algorithms keep hitting the same arm when it is hot, so they don't see the difference from the case where there are at most one hot arm.
+
 \clearpage
-Eventually we tried when there was 5 arms with 3 states each (with one hot arm at most) : 
+Then we tried with 5 arms with 3 states each (with one hot arm at most, 10 runs each) : 
 
 \begin{figure}[h]
 	\begin{center}
@@ -251,6 +255,35 @@ Eventually we tried when there was 5 arms with 3 states each (with one hot arm a
 	\end{minipage}
 	\label{fig:f}
 \end{figure}
+
+We observe that the UCB algorithm performs better, indeed as there are more arms, it explores more so it finds more hot states and high rewards.
+
+\clearpage
+Eventually we tried the same version with several hot arms (5 runs each) : 
+
+\begin{figure}[h]
+	\begin{center}
+		%\framebox[4.0in]{$\;$}
+		%\fbox{\rule[-.5cm]{0cm}{4cm} \rule[-.5cm]{4cm}{0cm}}
+		\includegraphics[width=1.0\textwidth]{all_ms_10000it.png}
+	\end{center}
+	\caption{All algorithms for 10000 iterations (5 arms * 3 states, several hot arms)}
+\end{figure}
+
+\begin{figure}[h]
+	\begin{minipage}[b]{.49\linewidth}
+		\includegraphics[width=1.0\textwidth]{begin_ms_1000it.png}
+		\caption{1000 first iterations (5*3, several)}
+	\end{minipage}
+	\hfill
+	\begin{minipage}[b]{0.49\linewidth}
+		\includegraphics[width=1.0\textwidth]{last_ms_1000it.png}
+		\caption{1000 last iterations (5*3, several)}
+	\end{minipage}
+	\label{fig:f}
+\end{figure}
+
+Here again the KNN\_LONG algorithm takes advantage for having a long term expectation calculation.
 
 \clearpage
 \section{Conclusion}

@@ -45,7 +45,7 @@ In this report, we describe a model of such Multi-armed Bandits and then expose 
 on Breaking News Multi-armed Bandits, before testing it on our model.
 \end{abstract}
 
-\section{Introduction*}
+\section*{Introduction}
 
 The Multi-armed Bandit (MAB) is a very important problem in the of Reinforcement Learning.
 Usually, it is modeled as a set of $A$ actions, called arms, that can be used at any time,
@@ -63,7 +63,7 @@ also maximize the reward, because each arm does not hove the same 'normal' rewar
 Our report is organized as follows: in the first
 section, we explain the model we used for data generation and in the second section, we recall the widely used
 Upper Confidence Bound algorithms for classic MAB problems. Then we describe
-several algorithms fitting the Breacking-news MAB problem.
+several algorithms fitting the Breaking News MAB problem.
 Eventually, in the last section we provide more results for different problems and comparison between
 the previously exposed algorithms.
 \newline
@@ -126,7 +126,9 @@ we know the MAB follows the model described in last section. Most of the algorit
 we present on next section are based on the UCB algorithm, and adapted to fit our model
 of Breaking News Bandit.
 
-\section{Exact probabilities inference with Gaussian Mixture}
+
+\section{Breaking News MAB Algorithms}
+\subsection{Exact probabilities inference with Gaussian Mixture}
 
 This first algorithm tries to be mathematically exact : we use a Gaussian mixture model using the Expectation-Maximisation algorithm to compute the mean of each state of each arm. Then given theses means (and variances) we compute the probability for each observed reward to come from one state. This gives for each state of each arm a sequence of probabilities. With theses sequence we compute the transition probabilities via a gradient descent. Thus, given the means and the transition probabilities, we can compute the expectation of each arm.
 \newline
@@ -150,7 +152,23 @@ Besides, this plot gives insight of what algorithms should do : if an arm is in 
 
 Note that if all arms are normal, this plot gives an optimal sequence of draws : as we select the highest point, the points not selected step by one unit on the right, thus increasing. And we repeat taking the highest point. Thus the arm with the lowest normal reward is not selected offenly since it has to increase more to become the highest point.
 
-\section{UCB\_Var}
+\subsection{Nearest Neighbors Upper Confidence Bound Algorithms}
+
+Here we try to estimate the expectations shown in figure 2. Unlike the Gaussian Mixture algorithm, we will use here a Monte-Carlo estimation. So the Nearest Neighbors algorithm starts by choosing each arm twice (initialization) and then from each arm, it embeds all previous rewards of this arm in the space (Last reward of the arm; Time since last draw; Reward observed). In practice the rewards are shifted and resized to fit in $[0,1]$ and the time since last draw in rather $exp(-time since last draw)$ so that a time of 1 is far from a time of 2 but a time of 56 is right next to time of 57.
+
+Then we compute where is the current point in that space - along the two first dimensions - and we take the average along the third dimension (expected reward) of all points that are within a distance of $d=0.1$. If there are no points in that range we take the nearest point. Then as we did it for each arm we choose the arm that has obtained the maximum average plus the upper confidence bound variance.
+
+In practice this algorithm performs at most like the UCB algorithm, but if we take the average over the $K$ nearest neighbors instead of the points within a $d$ range, then we get very good results.
+
+\subsection{K-Nearest Neighbors Long Term Expectation}
+
+Let's go back to the figure 2 : it show the best arm to draw given the last reward and the time since last draw. Unfortunately, this plot gives the greedy algorithm only for the next draw. Indeed we can think of an algorithm that draws a hot arm over and over, and then that draws a second arm even if the first arm is still hot, just because the expectation of that second arm is not $p(hot)*reward(hot) + p(normal)*reward(normal)$ but $p(ho	t)*reward(hot)*10 + p(normal)*reward(normal)$ if the algorithm knows that the second arms keeps being hot for at least 10 iterations.
+
+This is the problem we tried to fix in this algorithm : first it tries to approximate the expectation just like KNN, but after a non-negligible number of draws, we add in the expectation the second reward obtained, and then a little while after, the third rewards obtained, etc. We also add a decay rate so that the first reward counts more than following rewards.
+
+In practice it does not yield to an improvement because the change in probabilities is little so it does not change rewards significantly.
+
+\subsection{UCB\_Var}
 
 In this section, we describe an algorithm based on the UCB algorithm and on an estimation of the maximal
 value that an arm can reach when it is not hot, and use this estimation to detect when the
@@ -183,7 +201,7 @@ reward observed observed at along, and compute its variance, and we can't avoid
 a linear operation at each step, so the algorithm has a complexity of $\mathcal{O}(N^2)$ where N
 is the number of steps.
 
-\section{UCB\_Max}
+\subsection{UCB\_Max}
 
 To avoid the quadratic complexity of the previous algorithm, we choose to not compute
 the actual variance $\hat\sigma_a(t)$, but instead simply remember the maximal value
@@ -195,22 +213,6 @@ and we reinitialise $\hat\mu_a(t)$ (or take back the old value).
 This algorithm does not have results as good as UCB\_Var, but it faster and only have
 a linear complexity, since computing the mean $\hat\mu_a(t)$ and the max $M_a(t)$
 can be done with a finite number of operations at each step.
-
-\section{Nearest Neighbors Upper Confidence Bound Algorithms}
-
-Here we try to estimate the expectations shown in figure 2. Unlike the Gaussian Mixture algorithm, we will use here a Monte-Carlo estimation. So the Nearest Neighbors algorithm starts by choosing each arm twice (initialization) and then from each arm, it embeds all previous rewards of this arm in the space (Last reward of the arm; Time since last draw; Reward observed). In practice the rewards are shifted and resized to fit in $[0,1]$ and the time since last draw in rather $exp(-time since last draw)$ so that a time of 1 is far from a time of 2 but a time of 56 is right next to time of 57.
-
-Then we compute where is the current point in that space - along the two first dimensions - and we take the average along the third dimension (expected reward) of all points that are within a distance of $d=0.1$. If there are no points in that range we take the nearest point. Then as we did it for each arm we choose the arm that has obtained the maximum average plus the upper confidence bound variance.
-
-In practice this algorithm performs at most like the UCB algorithm, but if we take the average over the $K$ nearest neighbors instead of the points within a $d$ range, then we get very good results.
-
-\section{K-Nearest Neighbors Long Term Expectation}
-
-Let's go back to the figure 2 : it show the best arm to draw given the last reward and the time since last draw. Unfortunately, this plot gives the greedy algorithm only for the next draw. Indeed we can think of an algorithm that draws a hot arm over and over, and then that draws a second arm even if the first arm is still hot, just because the expectation of that second arm is not $p(hot)*reward(hot) + p(normal)*reward(normal)$ but $p(ho	t)*reward(hot)*10 + p(normal)*reward(normal)$ if the algorithm knows that the second arms keeps being hot for at least 10 iterations.
-
-This is the problem we tried to fix in this algorithm : first it tries to approximate the expectation just like KNN, but after a non-negligible number of draws, we add in the expectation the second reward obtained, and then a little while after, the third rewards obtained, etc. We also add a decay rate so that the first reward counts more than following rewards.
-
-In practice it does not yield to an improvement because the change in probabilities is little so it does not change rewards significantly.
 
 
 \section{Time of computation and results other different arms settings}

@@ -34,7 +34,11 @@ classdef severalHotArms<handle
             self.p = p;
         end
         
-        function [reward] = sample(self, s)
+        function [reward, hotState] = sample(self, s)
+            [maxh, hotState] = max(self.h,[],2);
+            if (maxh == 1)
+                hotState = 0;
+            end
             reward = self.arms{self.h(1,s), s}.sample();
             for n=1:size(self.h,2)
                 self.h(1,n) = mnrnd(1,self.p(self.h(1,n),:,n)) * (1:size(self.p,1))';

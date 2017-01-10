@@ -131,7 +131,16 @@ than the lower bound in Eq.~\ref{UCB-var-bound}, we then consider that this arm 
 left the hot state, and proceed with the samples observed before time $t$, having
 once again a smaller mean $\hat\mu(t')$.
 
+In practice, this algorithm gets quite stable and good results if we make sure,
+with some adaptations, to not keep thinking that an arm is hot when it is actually
+not. The main drawback of this algorithm is that we need to remember each
+reward observed observed at along, and compute its variance, and we can't avoid
+a linear operation at each step, so the algorithm has a complexity of $\mathcal{O}(N^2)$ where N
+is the number of steps.
+
 \section{UCB\_Max}
+
+To avoid the quadratic complexity of the previous algorithm, 
 
 \section{Nearest Neighbors Upper Confidence Bound Algorithms}
 

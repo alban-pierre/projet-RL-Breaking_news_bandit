@@ -37,21 +37,29 @@
 \maketitle
 
 \begin{abstract}
-Multi-armed bandit (MAB) is a very common problems, studied with many different approachs.
+Multi-armed bandit is a very common problems, studied with many different approachs.
 Besides, it is also derived in many ways, such as adversarial bandit, non-stationary bandit or distributed bandit.
 Here we focus on a variation called
 Breaking News multi-armed bandit, when one arm can have suddenly a high reward : this arm stays hot for a time before it comes back to normal.
-In this report, we describe a model of such MABs and then expose some algorithms to maximize the rewards
-on Breaking News MABs, before testing it on our model.
+In this report, we describe a model of such Multi-armed Bandits and then expose some algorithms to maximize the rewards
+on Breaking News Multi-armed Bandits, before testing it on our model.
 \end{abstract}
 
 \section{Introduction}
 
-Among differences from the classic multi armed bandit, the expectation can become
-very high compared to normal rewards, so an algorithm should keep pulling the same
-arm if it is hot. When no arms is hot, the algorithm should pull each arm frequently
+The Multi-armed Bandit (MAB) is a very important problem in the of Reinforcement Learning.
+Usually, it is modeled as a set of $A$ actions, called arms, that can be used at any time,
+and sending a reward to the user when he uses it. The general purpose is to create an algorithm that
+maximizes the reward over time without knowing the law controlling the rewards obtained
+for each arm.
+
+In this report, we focus on a specific type of MAB problem, called Breaking News MAB,
+where at each point of time, an arm can suddently have a higher mean reward for a short duration. The expectation can become
+very high compared to normal rewards, so, if possible, we should keep pulling the same
+arm while it is hot. When no arms is hot, the algorithm should pull each arm frequently
 in order to find a new breaking new. But during that time, the algorithm should
-also maximize its reward, because each arm does not hove the same 'normal' reward.
+also maximize the reward, because each arm does not hove the same 'normal' reward.
+
 We implemented several algorithms that have similar behaviors : in the first
 section, we explain data generation and then in second part the widely used
 Thompson Sampling and Upper Confidence Bound algorithms. Then we focus on an
@@ -273,7 +281,7 @@ We also tried for data where several arms can become hot at the same time (with 
 We observe quite the same things except for KNN\_LONG : this algorithm sometimes tries different arms while they were on a hot arm with a comparatively low hot reward. The other algorithms keep hitting the same arm when it is hot, so they don't see the difference from the case where there are at most one hot arm.
 
 \clearpage
-Then we tried with 5 arms with 3 states each (with one hot arm at most, 10 runs each) : 
+Then we tried with 5 arms with 3 states each (with one hot arm at most, 10 runs each) :
 
 \begin{figure}[h]
 	\begin{center}
@@ -300,7 +308,7 @@ Then we tried with 5 arms with 3 states each (with one hot arm at most, 10 runs 
 We observe that the UCB algorithm performs better, indeed as there are more arms, it explores more so it finds more hot states and high rewards.
 
 \clearpage
-Eventually we tried the same version with several hot arms (5 runs each) : 
+Eventually we tried the same version with several hot arms (5 runs each) :
 
 \begin{figure}[h]
 	\begin{center}

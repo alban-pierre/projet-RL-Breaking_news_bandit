@@ -47,7 +47,7 @@ function [rew, draws, hot_expected, hot_real] = UCB_Var(tmax, MAB)
             variance = var((unnorm_rew(:,ima)-rmin)/(rmax-rmin));
             [rew(1,t), h] = MAB.sample(ima);
             
-            if ((rew(1,t)-rmin)/(rmax-rmin) <= mu(1,ima)+variance+sqrt(log(t)/(2*na(1,ima)))) %The sample is in the range expected: arm not hot
+            if ((rew(1,t)-rmin)/(rmax-rmin) <= mu(1,ima)+variance+sqrt(1/(2*na(1,ima)))) %The sample is in the range expected: arm not hot
                 smu(1,ima) = smu(1,ima) + rew(1,t);
                 unnorm_rew(na(1,ima)+1, ima) = rew(1,t);
                 na(1,ima) = na(1,ima) + 1;
@@ -103,7 +103,7 @@ function [rew, draws, hot_expected, hot_real] = UCB_Var(tmax, MAB)
 %             disp(' ');
             variance = var((unnorm_rew(:,ima)-rmin)/(rmax-rmin));
             
-            if (ima == hotState && (rew(1,t)-rmin)/(rmax-rmin) < mu(1,ima)-variance-sqrt(1./(na(1,ima)))) % Leave hot state
+            if (ima == hotState && (rew(1,t)-rmin)/(rmax-rmin) < mu(1,ima)-variance-sqrt(1./(2*na(1,ima)))) % Leave hot state
                 %disp(['Leaving hot state detected ', num2str(ima), ' at time ', num2str(t)]);
                 hotState = 0;
                 %Take back old values

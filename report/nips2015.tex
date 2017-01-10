@@ -127,10 +127,24 @@ Here we show the results of each algorithms presented in last sections on the mu
 	\begin{center}
 		%\framebox[4.0in]{$\;$}
 		%\fbox{\rule[-.5cm]{0cm}{4cm} \rule[-.5cm]{4cm}{0cm}}
-		%\includegraphics[width=1.0]{all_1000it.png} TODO
+		\includegraphics[width=1.0\textwidth]{all_10000it.png}
 	\end{center}
-	\caption{Example of generated data}
+	\caption{All algorithms for 10000 iterations}
 \end{figure}
+
+\begin{figure}[h]
+	\begin{minipage}[b]{.49\linewidth}
+		\includegraphics[width=1.0\textwidth]{begin_1000it.png}
+		\caption{1000 first iterations}
+	\end{minipage}
+	\hfill
+	\begin{minipage}[b]{0.48\linewidth}
+		\includegraphics[width=1.0\textwidth]{last_1000it.png}
+		\caption{1000 last iterations}
+	\end{minipage}
+	\label{fig:f}
+\end{figure}
+
 
 Here are the computation time observed for 10000 iterations : 
 \begin{center}
@@ -139,6 +153,54 @@ Here are the computation time observed for 10000 iterations :
 		Time (sec) : & 7.12 & 2.19 & 1000.5 & 25.39 & 3.06 & 5.37
 	\end{tabular}
 \end{center}
+
+We also tried for data where several arms can become hot at the same time (with approximately the same transition probabilities) :
+
+\begin{figure}[h]
+	\begin{center}
+		%\framebox[4.0in]{$\;$}
+		%\fbox{\rule[-.5cm]{0cm}{4cm} \rule[-.5cm]{4cm}{0cm}}
+		\includegraphics[width=1.0]{all_m_10000it.png}
+	\end{center}
+	\caption{All algorithms for 10000 iterations}
+\end{figure}
+
+\begin{figure}[h]
+	\begin{minipage}[b]{.48\linewidth}
+		\includegraphics[width=1.0\textwidth]{begin_m_1000it.png}
+		\caption{1000 first iterations}
+	\end{minipage}
+	\hfill
+	\begin{minipage}[b]{0.48\linewidth}
+		\includegraphics[width=1.0\textwidth]{end_m_1000it.png}
+		\caption{1000 last iterations}
+	\end{minipage}
+	\label{fig:f}
+\end{figure}
+
+Eventually we tried when there was 5 arms with 3 states each (with one hot arm at most) : 
+
+\begin{figure}[h]
+	\begin{center}
+		%\framebox[4.0in]{$\;$}
+		%\fbox{\rule[-.5cm]{0cm}{4cm} \rule[-.5cm]{4cm}{0cm}}
+		\includegraphics[width=1.0]{all_s_10000it.png}
+	\end{center}
+	\caption{All algorithms for 10000 iterations}
+\end{figure}
+
+\begin{figure}[h]
+	\begin{minipage}[b]{.48\linewidth}
+		\includegraphics[width=1.0\textwidth]{begin_s_1000it.png}
+		\caption{1000 first iterations}
+	\end{minipage}
+	\hfill
+	\begin{minipage}[b]{0.48\linewidth}
+		\includegraphics[width=1.0\textwidth]{end_s_1000it.png}
+		\caption{1000 last iterations}
+	\end{minipage}
+	\label{fig:f}
+\end{figure}
 
 
 \section{Conclusion}

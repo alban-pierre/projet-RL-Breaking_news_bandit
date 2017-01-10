@@ -37,17 +37,17 @@
 \maketitle
 
 \begin{abstract}
-Multi-armed bandit is a very common problems, studied with many different approachs.
+Multi-armed bandits are very common problems, studied with many different approachs.
 Besides, it is also derived in many ways, such as adversarial bandit, non-stationary bandit or distributed bandit.
 Here we focus on a variation called
-Breaking News multi-armed bandit, when one arm can have suddenly a high reward: this arm stays hot for a time before it comes back to normal.
+Breaking News Multi-armed bandit, when one arm can have suddenly a high reward: this arm stays hot for a time before it comes back to normal.
 In this report, we describe a model of such Multi-armed Bandits and then expose some algorithms to maximize the rewards
 on Breaking News Multi-armed Bandits, before testing it on our model.
 \end{abstract}
 
 \section*{Introduction}
 
-The Multi-armed Bandit (MAB) is a very important problem in the of Reinforcement Learning.
+The Multi-armed Bandit (MAB) is a very important problem in the field of Reinforcement Learning.
 Usually, it is modeled as a set of $A$ actions, called arms, that can be used at any time,
 and sending a reward to the user when he uses it. The general purpose is to create an algorithm that
 maximizes the reward over time without knowing the law controlling the rewards obtained
@@ -56,9 +56,9 @@ for each arm.
 In this report, we focus on a specific type of MAB problem, called Breaking News MAB,
 where at each point of time, an arm can suddently have a higher mean reward for a short duration. The expectation can become
 very high compared to normal rewards, so, if possible, we should keep pulling the same
-arm while it is hot. When no arms is hot, the algorithm should pull each arm frequently
+arm while it is hot. When no arm is hot, the algorithm should pull each arm frequently
 in order to find a new breaking new. But during that time, the algorithm should
-also maximize the reward, because each arm does not hove the same 'normal' reward.
+also maximize the reward, because each arm does not have the same 'normal' reward.
 
 Our report is organized as follows: in the first
 section, we explain the model we used for data generation and in the second section, we recall the widely used
@@ -73,7 +73,7 @@ Note: the code we used in our experiments is in matlab (compatible with octave) 
 
 \section{Data generation}
 
-To generate the data, we model each arm to have several states, and for each state the reward follows a Gaussian distribution of a mean and a variance specific to that state (and to that arm). In the following experiments we used the means and variance :
+To generate the data, we model each arm to have several states, and for each state the reward follows a Gaussian distribution of a mean and a variance specific to that state (and to that arm). In the following experiments we used the means and variances :
 \begin{center}
 \begin{tabular}{rccc}
 	Arms : & 1st & 2nd & 3rd \\
@@ -130,12 +130,12 @@ of Breaking News Bandit.
 \section{Breaking News MAB Algorithms}
 \subsection{Exact probabilities inference with Gaussian Mixture}
 
-This first algorithm tries to be mathematically exact : we use a Gaussian mixture model using the Expectation-Maximisation algorithm to compute the mean of each state of each arm. Then given theses means (and variances) we compute the probability for each observed reward to come from one state. This gives for each state of each arm a sequence of probabilities. With theses sequence we compute the transition probabilities via a gradient descent. Thus, given the means and the transition probabilities, we can compute the expectation of each arm.
+This first algorithm tries to be mathematically exact : we use a Gaussian mixture model using the Expectation-Maximisation algorithm to compute the mean of each state of each arm. Then given these means (and variances) we compute the probability for each observed reward to come from one state. This gives for each state of each arm a sequence of probabilities. With these sequences we compute the transition probabilities via a gradient descent. Thus, given the means and the transition probabilities, we can compute the expectation of each arm.
 \newline
 
 In practice, we add an exploration term to force the algorithm to explore, but even with that it does not lead to better results than Thompson-Sampling. The reason of that poor result is that when we compute the expectation of each arm, a little change in transition probabilities leads to a huge change in the expectation of an arm (at least if this arm was not seen for a few time).
 
-Figure 3 show the exact expectation of an arm as a function of the time since the last draw. There are 2 curves for each arm because here each arm has 2 states (hot or not). Thus for one arm the upper curve is the expectation of that arm if the last time we draw it it was in the hot state, and the lower curve is the expectation of that arm if the last time we draw it it was in the normal state. The 2 curves converge because if we don't pull an arm for a long time, the probability to be hot is the same, whether it was hot or not the last time we draw that arm.
+Figure 2 shows the exact expectation of an arm as a function of the time since the last draw. There are 2 curves for each arm because here each arm has 2 states (hot or not). Thus for one arm the upper curve is the expectation of that arm if the last time we draw it it was in the hot state, and the lower curve is the expectation of that arm if the last time we draw it it was in the normal state. The 2 curves converge because if we don't pull an arm for a long time, the probability to be hot is the same, whether it was hot or not the last time we draw that arm.
 
 So in the case of the Gaussian Mixture algorithm, this is the plateau on the right that moves a lot due to approximations in transition probabilities, and then the outcome of the general algorithm is changed.
 
@@ -148,7 +148,7 @@ So in the case of the Gaussian Mixture algorithm, this is the plateau on the rig
 	\caption{Expectation of each arm as a function of time since the last draw}
 \end{figure}
 
-Besides, this plot gives insight of what algorithms should do : if an arm is in the hot state, the expectation is high so this algorithm should pull the same arm over and over until it is not hot anymore. When this hot arms become normal, the other arms were not pulled since a long time, so we are far on the right for these arms. Then we should chose the one that has the highest plateau. If this arm is not hot, then the expectation of this arm falls back to the beginning of the curve (on the bottom left). The expectation of the last arm not drawn is still on the plateau (so relatively high compared to other arms) and we should pull that arm.
+Besides, this plot gives insight of what algorithms should do : if an arm is in the hot state, the expectation is high so this algorithm should pull the same arm over and over until it is not hot anymore. When this hot arm become normal, the other arms were not pulled since a long time, so we are far on the right for these arms. Then we should chose the one that has the highest plateau. If this arm is not hot, then the expectation of this arm falls back to the beginning of the curve (on the bottom left). The expectation of the last arm not drawn is still on the plateau (so relatively high compared to other arms) and we should pull that arm.
 
 Note that if all arms are normal, this plot gives an optimal sequence of draws : as we select the highest point, the points not selected step by one unit on the right, thus increasing. And we repeat taking the highest point. Thus the arm with the lowest normal reward is not selected offenly since it has to increase more to become the highest point.
 
@@ -164,15 +164,15 @@ In practice this algorithm performs at most like the UCB algorithm, but if we ta
 
 Let's go back to the figure 2 : it show the best arm to draw given the last reward and the time since last draw. Unfortunately, this plot gives the greedy algorithm only for the next draw. Indeed we can think of an algorithm that draws a hot arm over and over, and then that draws a second arm even if the first arm is still hot, just because the expectation of that second arm is not $p(hot)*reward(hot) + p(normal)*reward(normal)$ but $p(ho	t)*reward(hot)*10 + p(normal)*reward(normal)$ if the algorithm knows that the second arms keeps being hot for at least 10 iterations.
 
-This is the problem we tried to fix in this algorithm : first it tries to approximate the expectation just like KNN, but after a non-negligible number of draws, we add in the expectation the second reward obtained, and then a little while after, the third rewards obtained, etc. We also add a decay rate so that the first reward counts more than following rewards.
+This is the problem we tried to fix in this algorithm : first it tries to approximate the expectation just like the previous K-Nearest Neighbors algorithm (KNN), but after a non-negligible number of draws, we add in the expectation the second reward obtained, and then a little while after, the third reward obtained, etc. We also add a decay rate so that the first reward counts more than following rewards.
 
-In practice it does not yield to an improvement because the change in probabilities is little so it does not change rewards significantly.
+In practice it does not yield to a big improvement because the change in probabilities is little so it does not change rewards significantly.
 
 \subsection{UCB\_Var}
 
 In this section, we describe an algorithm based on the UCB algorithm and on an estimation of the maximal
 value that an arm can reach when it is not hot, and use this estimation to detect when the
-arm is hot. Our purpose is then to estimated from a sequence of samples on a given arm $a$ the range
+arm is hot. Our purpose is then to estimate from a sequence of samples on a given arm $a$ the range
 of values we expect the next sample to be in. We will then exploit the mean $\hat\mu_a(t)$ and variance $\hat\sigma_a(t)$
 estimated from the previous samples and consider that if an arm stays in its initial
 state, the reward drawn $r$ should be in the range $r \in [\hat\mu_a(t)-\hat\sigma_a(t), \hat\mu_a(t)+\hat\sigma_a(t)]$.
@@ -197,7 +197,7 @@ once again a smaller mean $\hat\mu(t')$.
 In practice, this algorithm gets quite stable and good results if we make sure,
 with some adaptations, to not keep thinking that an arm is hot when it is actually
 not. The main drawback of this algorithm is that we need to remember each
-reward observed observed at along, and compute its variance, and we can't avoid
+reward observed at along, and compute its variance, and we can't avoid
 a linear operation at each step, so the algorithm has a complexity of $\mathcal{O}(N^2)$ where N
 is the number of steps.
 
@@ -215,11 +215,11 @@ a linear complexity, since computing the mean $\hat\mu_a(t)$ and the max $M_a(t)
 can be done with a finite number of operations at each step.
 
 
-\section{Time of computation and results other different arms settings}
+\section{Time of computation and results over different arms settings}
 
 Here we show the results of each algorithms presented in last section on the multi
 armed bandit settings presented in the Data generation section, while comparing them
-with the results from UCB Algorithm and Thompson Sampling [2] :
+with the results from UCB Algorithm and Thompson Sampling [2] (next page).
 
 \begin{figure}[h]
 	\begin{center}
@@ -337,10 +337,10 @@ Here again the KNN\_LONG algorithm takes advantage for having a long term expect
 \clearpage
 \section{Conclusion}
 
-We have shown that for the special case of multi armed bandit problem where an arm can become hot and have a big reward, classical algorithms like Thompson Sampling or Upper Confidence Bound misses high rewards as they explore less and less across time. Indeed exploration finds more hot states, leading to a bigger reward.
+We have shown that for the special case of multi armed bandit problem where an arm can become hot and have a big reward, classical algorithms like Thompson Sampling or Upper Confidence Bound misses high rewards as they explore less and less across time.
 
 To tackle this problem, we have tried to use the variance and the maximum of previous rewards of an arm to calculate when an arm is hot, then pulling always the hot arm. This lead to good results, but they don't improve over time. We have also used an algorithm that uses a Monte-Carlo approximation of expectation, it perform better in the end but it has a very long initialization phase.
 
-In the case where many hot arms can become hot simultaneously, we have shown that an algorithm that pulls arms according to the maximum of its expectation over many following draws can perform better than greedy algorithms other the next draw. But it has still difficulties to get a significantly better result, and it could be interesting for further research to develop an algorithm that compute some sort of fixed point or else to get the best greedy policy.
+In the case where many hot arms can become hot simultaneously, we have shown that an algorithm that pulls arms according to the maximum of its expectation over many following draws can perform better than greedy algorithms over the next draw. But it has still difficulties to get a significantly better result, and it could be interesting for further research to develop an algorithm that compute some sort of fixed point - just like figure 2 but with a reward over many following draws - to get the best greedy policy.
 
 \end{document}

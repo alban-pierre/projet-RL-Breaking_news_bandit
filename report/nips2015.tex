@@ -47,10 +47,22 @@ on Breaking News MABs, before testing it on our model.
 
 \section{Introduction}
 
-Among differences from the classic multi armed bandit, the expectation can become very high compared to normal rewards, so an algorithm should keep pulling the same arm if it is hot. When no arms is hot, the algorithm should pull each arm frequently in order to find a new breaking new. But during that time, the algorithm should also maximize its reward, because each arm does not hove the same 'normal' reward. We implemented several algorithms that have similar behaviors : in the first section, we explain data generation and then in second part the widely used Thompson Sampling and Upper Confidence Bound algorithms. Then we focus on an exact but very slow algorithm (GM) in part three. In section four we explain an algorithm that tries to detect whether we have a hot state based on maximum/minimum previous rewards and in the next part based on the previous rewards variance. Then in part six and seven we moved on an algorithm based on nearest neighbors. Eventually in the eight section we provide more results for different problems.
+Among differences from the classic multi armed bandit, the expectation can become
+very high compared to normal rewards, so an algorithm should keep pulling the same
+arm if it is hot. When no arms is hot, the algorithm should pull each arm frequently
+in order to find a new breaking new. But during that time, the algorithm should
+also maximize its reward, because each arm does not hove the same 'normal' reward.
+We implemented several algorithms that have similar behaviors : in the first
+section, we explain data generation and then in second part the widely used
+Thompson Sampling and Upper Confidence Bound algorithms. Then we focus on an
+exact but very slow algorithm (GM) in part three. In section four we explain an
+algorithm that tries to detect whether we have a hot state based on maximum/minimum
+previous rewards and in the next part based on the previous rewards variance.
+Then in part six and seven we moved on an algorithm based on nearest neighbors.
+Eventually in the eight section we provide more results for different problems.
 \newline
 
-Note : the code is in matlab (compatible with octave) and can be found at the address : https://github.com/alban-pierre/projet-RL-Breaking\_news\_bandit
+Note : the code we used in our experiments is in matlab (compatible with octave) and can be found at the address : https://github.com/alban-pierre/projet-RL-Breaking\_news\_bandit
 
 
 \section{Data generation}
@@ -79,7 +91,12 @@ For the transition probabilities : when one arm is in a hot state, this arm has 
 
 For the last section, we also used a model where several arms can become hot at the same time, with approximately the same probabilities of transition.
 
-\section{Thompson-Sampling and Upper Confidence Bound Algorithms}
+\section{Upper Confidence Bound Algorithm}
+
+In this section, we recall the widely used Upper Confidence Bound (UCB) Algorithm,
+as described in [1],
+that seeks to optimize the reward in the case of a regular MAB problem. The main
+idea is to compute
 
 \section{Exact probabilities inference with Gaussian Mixture}
 
@@ -149,7 +166,7 @@ and we reinitialise $\hat\mu_a(t)$ (or take back the old value).
 
 This algorithm does not have results as good as UCB\_Var, but it faster and only have
 a linear complexity, since computing the mean $\hat\mu_a(t)$ and the max $M_a(t)$
-can be done with a finite number of operations at each step. 
+can be done with a finite number of operations at each step.
 
 \section{Nearest Neighbors Upper Confidence Bound Algorithms}
 
@@ -228,7 +245,7 @@ We also tried for data where several arms can become hot at the same time (with 
 \end{figure}
 
 \clearpage
-Eventually we tried when there was 5 arms with 3 states each (with one hot arm at most) : 
+Eventually we tried when there was 5 arms with 3 states each (with one hot arm at most) :
 
 \begin{figure}[h]
 	\begin{center}
@@ -636,26 +653,11 @@ final paper.
 
 \subsubsection*{References}
 
-References follow the acknowledgments. Use unnumbered third level heading for
-the references. Any choice of citation style is acceptable as long as you are
-consistent. It is permissible to reduce the font size to `small' (9-point)
-when listing the references. {\bf Remember that this year you can use
-a ninth page as long as it contains \emph{only} cited references.}
 
 \small{
-[1] Alexander, J.A. \& Mozer, M.C. (1995) Template-based algorithms
-for connectionist rule extraction. In G. Tesauro, D. S. Touretzky
-and T.K. Leen (eds.), {\it Advances in Neural Information Processing
-Systems 7}, pp. 609-616. Cambridge, MA: MIT Press.
+[1] Auer, P., Cesa-Bianchi, N., & Fischer, P. (2002). Finite-time analysis of the multiarmed bandit problem. Machine learning, 47(2-3), 235-256.
 
-[2] Bower, J.M. \& Beeman, D. (1995) {\it The Book of GENESIS: Exploring
-Realistic Neural Models with the GEneral NEural SImulation System.}
-New York: TELOS/Springer-Verlag.
-
-[3] Hasselmo, M.E., Schnell, E. \& Barkai, E. (1995) Dynamics of learning
-and recall at excitatory recurrent synapses and cholinergic modulation
-in rat hippocampal region CA3. {\it Journal of Neuroscience}
-{\bf 15}(7):5249-5262.
+[2] Agrawal, S., & Goyal, N. (2012, June). Analysis of Thompson Sampling for the Multi-armed Bandit Problem. In COLT (pp. 39-1).
 }
 
 \end{document}

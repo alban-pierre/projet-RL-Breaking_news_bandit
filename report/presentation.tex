@@ -173,11 +173,12 @@
 	
 	\subsection{Nearest Neighbors Upper Confidence Bound Algorithms}
 	
-	Here we try to estimate the expectations shown in figure 2. Unlike the Gaussian Mixture algorithm, we will use here a Monte-Carlo estimation. So the Nearest Neighbors algorithm starts by choosing each arm twice (initialization) and then from each arm, it embeds all previous rewards of this arm in the space (Last reward of the arm; Time since last draw; Reward observed). In practice the rewards are shifted and resized to fit in $[0,1]$ and the time since last draw in rather $exp(-time since last draw)$ so that a time of 1 is far from a time of 2 but a time of 56 is right next to time of 57.
+	\begin{itemize}
+		\item Monte-Carlo estimation
+		\item Embeds all previous rewards in a space (Last reward of the arm; Time since last draw) with some convenient deformations.
+		\item For a new point, it computes the average expectation of neighbors
+	\end{itemize}
 	
-	Then we compute where is the current point in that space - along the two first dimensions - and we take the average along the third dimension (expected reward) of all points that are within a distance of $d=0.1$. If there are no points in that range we take the nearest point. Then as we did it for each arm we choose the arm that has obtained the maximum average plus the upper confidence bound variance.
-	
-	In practice this algorithm performs at most like the UCB algorithm, but if we take the average over the $K$ nearest neighbors instead of the points within a $d$ range, then we get very good results.
 \end{frame}
 
 \begin{frame}
@@ -185,11 +186,11 @@
 	
 	\subsection{K-Nearest Neighbors Long Term Expectation}
 	
-	Let's go back to the figure 2 : it show the best arm to draw given the last reward and the time since last draw. Unfortunately, this plot gives the greedy algorithm only for the next draw. Indeed we can think of an algorithm that draws a hot arm over and over, and then that draws a second arm even if the first arm is still hot, just because the expectation of that second arm is not $p(hot)*reward(hot) + p(normal)*reward(normal)$ but $p(ho	t)*reward(hot)*10 + p(normal)*reward(normal)$ if the algorithm knows that the second arms keeps being hot for at least 10 iterations.
+	Tries to have a long term strategy instead of a greedy choose of next draw.
+	\newline
 	
-	This is the problem we tried to fix in this algorithm : first it tries to approximate the expectation just like the previous K-Nearest Neighbors algorithm (KNN), but after a non-negligible number of draws, we add in the expectation the second reward obtained, and then a little while after, the third reward obtained, etc. We also add a decay rate so that the first reward counts more than following rewards.
+	It pulls arms according to the $n$ future rewards (with a decay rate)
 	
-	In practice it does not yield to a big improvement because the change in probabilities is little so it does not change rewards significantly.
 \end{frame}
 
 \begin{frame}
@@ -248,49 +249,66 @@
 \end{frame}
 
 \begin{frame}
-	\frametitle{Time of computation and results over different arms settings}
+	\frametitle{Time of computation}
 	
 	\section{Time of computation and results}
 	
-	Here we show the results of each algorithms presented in last section on the multi
-	armed bandit settings presented in the Data generation section, while comparing them
-	with the results from UCB Algorithm and Thompson Sampling [2] (next page).
-	
+	 At most one hot state, 3 arms * 2 states :
+	 \newline
+	 
+	 
+	 	\begin{tabular}{rccccc}
+	 		Arms : & TS & UCB & GM & UCB\_KNN & KNN\_LONG \\
+	 		Time (sec) : & 7.12 & 2.19 & 1000.5 & 25.39 & 35.85
+	 	\end{tabular}
+	 	\newline
+	 	\newline
+	 	
+	 	\begin{tabular}{rcc}
+	 		Arms : & UCB\_MAX & UCB\_VAR \\
+	 		Time (sec) : & 3.06 & 5.37
+	 	\end{tabular}
+	 
+\end{frame}
+
+\begin{frame}
+	\frametitle{Results (One hot arm, 3 arms * 2 states)}
+	 
 	\begin{figure}[h]
 		\begin{center}
 			%\framebox[4.0in]{$\;$}
 			%\fbox{\rule[-.5cm]{0cm}{4cm} \rule[-.5cm]{4cm}{0cm}}
-			\includegraphics[width=1.0\textwidth]{all_10000it.png}
+			\vspace{-10pt}
+			\includegraphics[width=1.05\textheight]{all_10000it.png}
+			
+			\vspace{-7pt}
+			\scriptsize{All algorithms for 10000 iterations (3 arms * 2 states, One hot arm)}
 		\end{center}
-		\caption{All algorithms for 10000 iterations (3 arms * 2 states, at most one hot arm)}
 	\end{figure}
-	
+\end{frame}
+
+\begin{frame}
+	\frametitle{Results (One hot arm, 3 arms * 2 states)}	
 	\begin{figure}[h]
 		\begin{minipage}[b]{.49\linewidth}
 			\includegraphics[width=1.0\textwidth]{begin_1000it.png}
-			\caption{1000 first iterations (3*2, one)}
+			
+			\centering{\scriptsize{1000 first iterations (3*2, one)}}
 		\end{minipage}
 		\hfill
 		\begin{minipage}[b]{0.49\linewidth}
 			\includegraphics[width=1.0\textwidth]{last_1000it.png}
-			\caption{1000 last iterations (3*2, one)}
+			
+			\centering{\scriptsize{1000 last iterations (3*2, one)}}
 		\end{minipage}
 		\label{fig:f}
 	\end{figure}
 	
-	Here are the computation time observed for 10000 iterations :
-	\begin{center}
-		\begin{tabular}{rccccccc}
-			Arms : & TS & UCB & GM & UCB\_KNN & KNN\_LONG & UCB\_MAX & UCB\_VAR \\
-			Time (sec) : & 7.12 & 2.19 & 1000.5 & 25.39 & 35.85 & 3.06 & 5.37
-		\end{tabular}
-	\end{center}
-	
-	We can see that the performance of TS and UCB decrease over time, which is normal because they reduce exploration over time, and it is exploration that discovers hot states. The UCB\_KNN and KNN\_LONG increase their performance as theirs Monte-Carlo estimations are more and more precise. The UCB\_MAX and UCB\_VAR algorithms perform well in the beginning.
-	
-	\clearpage
-	We also tried for data where several arms can become hot at the same time (with approximately the same transition probabilities, 5 runs each) :
-	
+\end{frame}
+
+\begin{frame}
+	\frametitle{Results (Ona hot arm, 3 arms * 2 states)}
+		
 	\begin{figure}[h]
 		\begin{center}
 			%\framebox[4.0in]{$\;$}

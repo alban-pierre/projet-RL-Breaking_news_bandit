@@ -281,8 +281,8 @@
 			\vspace{-10pt}
 			\includegraphics[width=1.05\textheight]{all_10000it.png}
 			
-			\vspace{-7pt}
-			\scriptsize{All algorithms for 10000 iterations (3 arms * 2 states, One hot arm)}
+			\vspace{-10pt}
+			\centering{\scriptsize{All algorithms for 10000 iterations (3 arms * 2 states, One hot arm)}}
 		\end{center}
 	\end{figure}
 \end{frame}
@@ -307,87 +307,109 @@
 \end{frame}
 
 \begin{frame}
-	\frametitle{Results (Ona hot arm, 3 arms * 2 states)}
+	\frametitle{Results (Several hot arms, 3 arms * 2 states)}
 		
 	\begin{figure}[h]
 		\begin{center}
 			%\framebox[4.0in]{$\;$}
 			%\fbox{\rule[-.5cm]{0cm}{4cm} \rule[-.5cm]{4cm}{0cm}}
-			\includegraphics[width=1.0\textwidth]{all_m_10000it.png}
+			\vspace{-10pt}
+			\includegraphics[width=1.05\textheight]{all_m_10000it.png}
+			
+			\vspace{-10pt}
+			\centering{\scriptsize{All algorithms for 10000 iterations (3 arms * 2 states, several hot arms)}}
 		\end{center}
-		\caption{All algorithms for 10000 iterations (3 arms * 2 states, several hot arms)}
 	\end{figure}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Results (Several hot arms, 3 arms * 2 states)}
 	
 	\begin{figure}[h]
 		\begin{minipage}[b]{.49\linewidth}
 			\includegraphics[width=1.0\textwidth]{begin_m_1000it.png}
-			\caption{1000 first iterations (3*2, several)}
+			
+			\centering{\scriptsize{1000 first iterations (3*2, several)}}
 		\end{minipage}
 		\hfill
 		\begin{minipage}[b]{0.49\linewidth}
 			\includegraphics[width=1.0\textwidth]{last_m_1000it.png}
-			\caption{1000 last iterations (3*2, several)}
+			
+			\centering{\scriptsize{1000 last iterations (3*2, several)}}
 		\end{minipage}
 		\label{fig:f}
 	\end{figure}
-	
-	We observe quite the same things except for KNN\_LONG : this algorithm sometimes tries different arms while they were on a hot arm with a comparatively low hot reward. The other algorithms keep hitting the same arm when it is hot, so they don't see the difference from the case where there are at most one hot arm.
-	
-	\clearpage
-	Then we tried with 5 arms with 3 states each (with one hot arm at most, 10 runs each) :
+\end{frame}
+
+\begin{frame}
+	\frametitle{Results (One hot arm, 5 arms * 3 states)}
 	
 	\begin{figure}[h]
 		\begin{center}
 			%\framebox[4.0in]{$\;$}
 			%\fbox{\rule[-.5cm]{0cm}{4cm} \rule[-.5cm]{4cm}{0cm}}
-			\includegraphics[width=1.0\textwidth]{all_s_10000it.png}
+			\vspace{-10pt}
+			\includegraphics[width=1.05\textheight]{all_s_10000it.png}
+			
+			\vspace{-10pt}
+			\centering{\scriptsize{All algorithms for 10000 iterations (5 arms * 3 states, at most one hot arm)}}
 		\end{center}
-		\caption{All algorithms for 10000 iterations (5 arms * 3 states, at most one hot arm)}
 	\end{figure}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Results (One hot arm, 5 arms * 3 states)}
 	
 	\begin{figure}[h]
 		\begin{minipage}[b]{.49\linewidth}
 			\includegraphics[width=1.0\textwidth]{begin_s_1000it.png}
-			\caption{1000 first iterations (5*3, one)}
+			
+			\centering{\scriptsize{1000 first iterations (5*3, one)}}
 		\end{minipage}
 		\hfill
 		\begin{minipage}[b]{0.49\linewidth}
 			\includegraphics[width=1.0\textwidth]{last_s_1000it.png}
-			\caption{1000 last iterations (5*3, one)}
+			
+			\centering{\scriptsize{1000 last iterations (5*3, one)}}
 		\end{minipage}
 		\label{fig:f}
 	\end{figure}
-	
-	We observe that the UCB algorithm performs better, indeed as there are more arms, it explores more so it finds more hot states and high rewards.
-	
-	\clearpage
-	Eventually we tried the same version with several hot arms (5 runs each) :
+\end{frame}
+
+\begin{frame}
+	\frametitle{Results (Several hot arms, 5 arms * 3 states)}
 	
 	\begin{figure}[h]
 		\begin{center}
 			%\framebox[4.0in]{$\;$}
 			%\fbox{\rule[-.5cm]{0cm}{4cm} \rule[-.5cm]{4cm}{0cm}}
-			\includegraphics[width=1.0\textwidth]{all_ms_10000it.png}
+			\vspace{-10pt}
+			\includegraphics[width=1.05\textheight]{all_ms_10000it.png}
+			
+			\vspace{-10pt}
+			\centering{\scriptsize{All algorithms for 10000 iterations (5 arms * 3 states, several hot arms)}}
 		\end{center}
-		\caption{All algorithms for 10000 iterations (5 arms * 3 states, several hot arms)}
 	\end{figure}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Results (Several hot arms, 5 arms * 3 states)}
 	
 	\begin{figure}[h]
 		\begin{minipage}[b]{.49\linewidth}
 			\includegraphics[width=1.0\textwidth]{begin_ms_1000it.png}
-			\caption{1000 first iterations (5*3, several)}
+			
+			\centering{\scriptsize{1000 first iterations (5*3, several)}}
 		\end{minipage}
 		\hfill
 		\begin{minipage}[b]{0.49\linewidth}
 			\includegraphics[width=1.0\textwidth]{last_ms_1000it.png}
-			\caption{1000 last iterations (5*3, several)}
+			
+			\centering{\scriptsize{1000 last iterations (5*3, several)}}
 		\end{minipage}
 		\label{fig:f}
 	\end{figure}
 	
-	Here again the KNN\_LONG algorithm takes advantage for having a long term expectation calculation.
-	
-	\clearpage
 \end{frame}
 
 \begin{frame}
@@ -395,11 +417,19 @@
 	
 	\section{Conclusion}
 	
-	We have shown that for the special case of multi armed bandit problems where an arm can become hot and have a big reward temporarily, classical algorithms like Thompson Sampling or Upper Confidence Bound miss high rewards as they explore less and less across time.
-	
-	To tackle this problem, we have tried to use the variance and the maximum of previous rewards of an arm to estimate when an arm is hot, then pulling always the hot arm. This lead to good results, but they don't improve over time. We have also used an algorithm that uses a Monte-Carlo approximation of expectation, it performs better in the end but it has a very long initialization phase.
-	
-	In the case where many hot arms can become hot simultaneously, we have shown that an algorithm that pulls arms according to the maximum of its expectation over many following draws can perform better than greedy algorithms over the next draw. But it has still difficulties to get a significantly better result, and it could be interesting for further research to develop an algorithm that computes some sort of fixed point - just like figure 2 but with a reward over many following draws - to get the best greedy policy.
+	\begin{itemize}
+		\item UCB misses high rewards as they explore less over time.
+		
+		\item UCB\_Var and UCB\_Max : good but don't improve over time.
+		
+		\item UCB\_KNN : good at the end but have a long initialization.
+		
+		\item KNN\_LONG performs better with several hot arms.
+	\newline
+	\end{itemize}
+
+$\rightarrow$ Compute greedy algorithm for the next $n$ draws instead of one ?
+$\rightarrow$ Try arms that do not follow a Gaussian distribution ?
 	
 \end{frame}
 
@@ -417,7 +447,7 @@
 \end{frame}
 	
 	\begin{frame}
-	\frametitle{Remerciements}
+	\frametitle{Thanks}
 	
 	Thank you for your attention !
 	

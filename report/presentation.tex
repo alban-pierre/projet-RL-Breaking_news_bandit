@@ -139,31 +139,37 @@
 	\section{Breaking News MAB Algorithms}
 	\subsection{Exact probabilities inference with Gaussian Mixture}
 	
-	This first algorithm tries to be mathematically exact : we use a Gaussian mixture model using the Expectation-Maximisation algorithm to compute the mean of each state of each arm. Then, given these means (and variances), we compute the probability for each observed reward to come from one state. This gives for each state of each arm a sequence of probabilities. With these sequences we compute the transition probabilities via a gradient descent. Thus, given the means and the transition probabilities, we can compute the expectation of each arm.
+	Tries to be mathematically exact.
+	\begin{itemize}
+		\item Gaussian mixture (EM algorithm)
+		\item Computes probabilities of each state from an observed reward
+		\item Computes transition probabilities (gradient descent)
 	\newline
+	\end{itemize}
 	
-	In practice, we add an exploration term to force the algorithm to explore, but even with that it does not lead to better results than Thompson-Sampling. The reason of that poor result is that when we compute the expectation of each arm, a little change in transition probabilities leads to a huge change in the expectation of an arm (at least if this arm was not seen for a few time).
+	$\rightarrow$ Very long to compute
 	
-	Figure 2 shows the exact expectation of an arm as a function of the time since the last draw. There are 2 curves for each arm because, here, each arm has 2 states (hot or not). Thus for one arm the upper curve is the expectation of that arm if the last time we draw it it was in the hot state, and the lower curve is the expectation of that arm if the last time we draw it it was in the normal state. The 2 curves converge because if we don't pull an arm for a long time, the probability to be hot is the same, whether it was hot or not the last time we draw that arm.
+	$\rightarrow$ Parameters very sensible to little changes
 	
-	So in the case of the Gaussian Mixture algorithm, this is the plateau on the right that moves a lot due to approximations in transition probabilities, and then the outcome of the general algorithm is changed.
+	$\rightarrow$ Takes too much time to get stable parameters
 	
+\end{frame}
+
+\begin{frame}
+	\frametitle{Intuitions for Breaking News Bandit algorithms}
 	\begin{figure}[h]
 		\begin{center}
 			%\framebox[4.0in]{$\;$}
 			%\fbox{\rule[-.5cm]{0cm}{4cm} \rule[-.5cm]{4cm}{0cm}}
-			\includegraphics[width=1.0\textwidth]{expectations.png}
+			\includegraphics[width=0.78\textwidth]{expectations.png}
 		\end{center}
 		\caption{Expectation of each arm as a function of time since the last draw}
 	\end{figure}
 	
-	Besides, this plot gives insight of what algorithms should do : if an arm is in the hot state, the expectation is high so this algorithm should pull the same arm over and over until it is not hot anymore. When this hot arm becomes normal, the other arms were not pulled since a long time, so we are far on the right for these arms. Then we should chose the one that has the highest plateau. If this arm is not hot, then the expectation of this arm falls back to the beginning of the curve (on the bottom left). The expectation of the last arm not drawn is still on the plateau (so relatively high compared to other arms) and we should pull that arm.
-	
-	Note that if all arms are normal, this plot gives an optimal sequence of draws : as we select the highest point, the points not selected step by one unit on the right, thus increasing. And we repeat taking the highest point. Thus the arm with the lowest normal reward is not selected offenly since it has to increase more to become the highest point.
 \end{frame}
 
 \begin{frame}
-	\frametitle{Exact probabilities inference with Gaussian Mixture}
+	\frametitle{Nearest Neighbors Upper Confidence Bound Algorithms}
 	
 	\subsection{Nearest Neighbors Upper Confidence Bound Algorithms}
 	
@@ -244,7 +250,7 @@
 \begin{frame}
 	\frametitle{Time of computation and results over different arms settings}
 	
-	\section{Time of computation and results over different arms settings}
+	\section{Time of computation and results}
 	
 	Here we show the results of each algorithms presented in last section on the multi
 	armed bandit settings presented in the Data generation section, while comparing them

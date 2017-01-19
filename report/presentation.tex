@@ -85,30 +85,19 @@
 	\begin{frame}
 	\frametitle{Data generation}
 	\section{Data generation}
-	
-	To generate the data, we model each arm to have several states, and for each state the reward follows a Gaussian distribution of a mean and a variance specific to that state (and to that arm). In the following experiments we used the means and variances :
-	\begin{center}
-		\begin{tabular}{rccc}
-			Arms : & 1st & 2nd & 3rd \\
-			Mean of the 1st state : & 2.0 & 3.0 & 1.0 \\
-			Variance of the 1st state : & 1.0 & 1.0 & 1.0 \\
-			Mean of the 2nd state : & 70.0 & 50.0 & 80.0 \\
-			Variance of the 2nd state : & 1.0 & 1.0 & 1.0 \\
-		\end{tabular}
-	\end{center}
-	For the transition probabilities : when one arm is in a hot state, this arm has a probability $p=0.1$ to come back to normal, the others stay at a normal state. When each arm is at the normal state, then we sample one arm randomly and it became hot with probability $p=0.03$. In such a model, there are at most one arm in the hot state. An example of a generated data with these parameters is shown in figure 1.
-	\newline
+	Several states per arms, with a Gaussian distribution
+	\begin{itemize}
+		\item At most one hot arm for a time $t$
+		\item Several hot arms at the same time $t$ possible
+	\end{itemize}
 	
 	\begin{figure}[h]
-		\begin{center}
-			%\framebox[4.0in]{$\;$}
-			%\fbox{\rule[-.5cm]{0cm}{4cm} \rule[-.5cm]{4cm}{0cm}}
 			\includegraphics[width=0.7\linewidth]{generated_data_one.png}
-		\end{center}
-		\caption{Example of generated data}
+			%\caption{Example of generated data}
+
+		\label{fig:f}
 	\end{figure}
 	
-	For the last section, we also used a model where several arms can become hot at the same time, with approximately the same probabilities of transition.
 	
 \end{frame}
 
